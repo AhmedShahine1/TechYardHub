@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InitialProject.Core.DTO.EntityDTO
+namespace TechYardHub.Core.DTO.EntityDTO
 {
     public class RequestResponseLog
     {

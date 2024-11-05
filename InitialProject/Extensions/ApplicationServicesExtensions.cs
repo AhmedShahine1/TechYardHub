@@ -1,7 +1,7 @@
-﻿using InitialProject.BusinessLayer.Interfaces;
-using InitialProject.BusinessLayer.Services;
+﻿using TechYardHub.BusinessLayer.Interfaces;
+using TechYardHub.BusinessLayer.Services;
 
-namespace InitialProject.Extensions;
+namespace TechYardHub.Extensions;
 
 public static class ApplicationServicesExtensions
 {

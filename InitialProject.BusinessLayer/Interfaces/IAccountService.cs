@@ -1,4 +1,4 @@
-﻿namespace InitialProject.BusinessLayer.Interfaces;
+﻿namespace TechYardHub.BusinessLayer.Interfaces;
 
 public interface IAccountService
 {

@@ -1,4 +1,4 @@
-﻿namespace InitialProject.Core.DTO;
+﻿namespace TechYardHub.Core.DTO;
 
 public class BaseResponse
 {

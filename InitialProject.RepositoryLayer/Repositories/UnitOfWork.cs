@@ -1,7 +1,7 @@
-﻿using InitialProject.Core;
-using InitialProject.RepositoryLayer.Interfaces;
+﻿using TechYardHub.Core;
+using TechYardHub.RepositoryLayer.Interfaces;
 
-namespace InitialProject.RepositoryLayer.Repositories;
+namespace TechYardHub.RepositoryLayer.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {

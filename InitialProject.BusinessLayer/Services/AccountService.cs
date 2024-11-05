@@ -1,6 +1,6 @@
-﻿using InitialProject.BusinessLayer.Interfaces;
+﻿using TechYardHub.BusinessLayer.Interfaces;
 
-namespace InitialProject.BusinessLayer.Services;
+namespace TechYardHub.BusinessLayer.Services;
 
 public class AccountService : IAccountService
 {

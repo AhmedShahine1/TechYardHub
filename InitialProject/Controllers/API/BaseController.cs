@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace InitialProject.Controllers.API
+namespace TechYardHub.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]

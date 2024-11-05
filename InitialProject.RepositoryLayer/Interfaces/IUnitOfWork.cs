@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace InitialProject.RepositoryLayer.Interfaces;
+namespace TechYardHub.RepositoryLayer.Interfaces;
 
 public interface IUnitOfWork : IDisposable
 {

@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using InitialProject.Core;
-using InitialProject.Middleware;
-using InitialProject.Extensions;
+using TechYardHub.Core;
+using TechYardHub.Middleware;
+using TechYardHub.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

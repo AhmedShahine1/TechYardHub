@@ -1,5 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
-namespace InitialProject.Extensions;
+namespace TechYardHub.Extensions;
 
 public static class SwaggerServiceExtensions
 {

@@ -1,9 +1,9 @@
 using System.Net;
 using System.Text.Json;
-using InitialProject.Core.DTO;
+using TechYardHub.Core.DTO;
 
 
-namespace InitialProject.Middleware;
+namespace TechYardHub.Middleware;
 
 public class ExceptionMiddleware
 {

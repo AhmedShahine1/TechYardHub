@@ -1,8 +1,8 @@
-﻿using InitialProject.BusinessLayer.Interfaces;
-using InitialProject.Core.Helpers;
+﻿using TechYardHub.BusinessLayer.Interfaces;
+using TechYardHub.Core.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace InitialProject.Areas.Support.Controllers
+namespace TechYardHub.Areas.Support.Controllers
 {
     [Area("Support")]
     public class RequestResponseViewerController : Controller

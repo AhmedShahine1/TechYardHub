@@ -1,11 +1,11 @@
 ﻿using System.Text;
-using InitialProject.Core;
-using InitialProject.Core.Helpers;
+using TechYardHub.Core;
+using TechYardHub.Core.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 
-namespace InitialProject.Extensions;
+namespace TechYardHub.Extensions;
 
 public static class IdentityServicesExtensions
 {

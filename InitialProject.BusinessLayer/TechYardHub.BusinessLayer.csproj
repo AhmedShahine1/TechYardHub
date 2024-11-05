@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InitialProject.Core\InitialProject.Core.csproj" />
-    <ProjectReference Include="..\InitialProject.RepositoryLayer\InitialProject.RepositoryLayer.csproj" />
+    <ProjectReference Include="..\InitialProject.Core\TechYardHub.Core.csproj" />
+    <ProjectReference Include="..\InitialProject.RepositoryLayer\TechYardHub.RepositoryLayer.csproj" />
   </ItemGroup>
 
 </Project>

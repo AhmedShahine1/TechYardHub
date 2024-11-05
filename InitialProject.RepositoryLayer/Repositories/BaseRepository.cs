@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
-using InitialProject.Core;
-using InitialProject.RepositoryLayer.Interfaces;
+using TechYardHub.Core;
+using TechYardHub.RepositoryLayer.Interfaces;
 
-namespace InitialProject.RepositoryLayer.Repositories;
+namespace TechYardHub.RepositoryLayer.Repositories;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {

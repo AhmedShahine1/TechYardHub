@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
-namespace InitialProject.RepositoryLayer.Interfaces;
+namespace TechYardHub.RepositoryLayer.Interfaces;
 
 public interface IBaseRepository<T> where T : class
 {

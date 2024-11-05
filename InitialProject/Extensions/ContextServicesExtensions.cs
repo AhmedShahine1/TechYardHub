@@ -1,13 +1,13 @@
 ﻿using System.Text.Json.Serialization;
-using InitialProject.BusinessLayer.Interfaces;
-using InitialProject.BusinessLayer.Services;
-using InitialProject.Core;
-using InitialProject.RepositoryLayer.Interfaces;
-using InitialProject.RepositoryLayer.Repositories;
-using Kawkaba.BusinessLayer.AutoMapper;
+using TechYardHub.BusinessLayer.Interfaces;
+using TechYardHub.BusinessLayer.Services;
+using TechYardHub.Core;
+using TechYardHub.RepositoryLayer.Interfaces;
+using TechYardHub.RepositoryLayer.Repositories;
+using TechYardHub.BusinessLayer.AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
-namespace InitialProject.Extensions;
+namespace TechYardHub.Extensions;
 
 public static class ContextServicesExtensions
 {

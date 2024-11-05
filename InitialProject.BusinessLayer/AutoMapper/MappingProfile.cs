@@ -1,7 +1,7 @@
 ﻿
 using AutoMapper;
 
-namespace Kawkaba.BusinessLayer.AutoMapper
+namespace TechYardHub.BusinessLayer.AutoMapper
 {
     public class MappingProfile : Profile
     {

@@ -2,8 +2,8 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using InitialProject.Core.DTO.EntityDTO;
-using InitialProject.BusinessLayer.Interfaces;
+using TechYardHub.Core.DTO.EntityDTO;
+using TechYardHub.BusinessLayer.Interfaces;
 
 public class RequestResponseLoggingMiddleware
 {
