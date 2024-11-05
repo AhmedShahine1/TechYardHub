@@ -4,6 +4,7 @@ using InitialProject.BusinessLayer.Services;
 using InitialProject.Core;
 using InitialProject.RepositoryLayer.Interfaces;
 using InitialProject.RepositoryLayer.Repositories;
+using Kawkaba.BusinessLayer.AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace InitialProject.Extensions;
@@ -21,6 +22,7 @@ public static class ContextServicesExtensions
         // IBaseRepository && IUnitOfWork Service
         //services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>)); // only Repository
         services.AddTransient<IUnitOfWork, UnitOfWork>(); // Repository and UnitOfWork
+        services.AddAutoMapper(typeof(MappingProfile));
 
         return services;
     }
