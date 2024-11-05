@@ -1,4 +1,4 @@
-﻿namespace TechYardHub.BusinessLayer.Interfaces;
+﻿namespace InitialProject.BusinessLayer.Interfaces;
 
 public interface IService<T>
 {

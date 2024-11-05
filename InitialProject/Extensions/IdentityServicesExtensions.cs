@@ -47,8 +47,7 @@ public static class IdentityServicesExtensions
         {
             options.AddPolicy("Admin", policy => policy.RequireRole("Admin", "Support Developer"));
             options.AddPolicy("Support Developer", policy => policy.RequireRole("Support Developer"));
-            options.AddPolicy("Employee", policy => policy.RequireRole("Employee", "Admin", "Support Developer"));
-            options.AddPolicy("Company", policy => policy.RequireRole("Company", "Admin", "Support Developer"));
+            options.AddPolicy("Customer", policy => policy.RequireRole("Customer", "Admin", "Support Developer"));
         });
 
         return services;

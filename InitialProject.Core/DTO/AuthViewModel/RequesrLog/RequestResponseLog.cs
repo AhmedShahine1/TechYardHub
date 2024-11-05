@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TechYardHub.Core.DTO.EntityDTO
+﻿namespace TechYardHub.Core.DTO.AuthViewModel.RequesrLog
 {
     public class RequestResponseLog
     {
@@ -12,6 +6,6 @@ namespace TechYardHub.Core.DTO.EntityDTO
         public string HttpMethod { get; set; }
         public string RequestBody { get; set; }
         public string ResponseBody { get; set; }
-        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+        public DateTime Timestamp { get; set; } = DateTime.Now;
     }
 }

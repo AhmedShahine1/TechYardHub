@@ -26,35 +26,35 @@ namespace TechYardHub.BusinessLayer.AutoMapper
             //// Mapping for ApplicationUser <-> RegisterAdmin
             //CreateMap<ApplicationUser, RegisterAdmin>()
             //    .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
-            //    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+            //    .ForMember(dest => dest.EmailorPhoneNumber, opt => opt.MapFrom(src => src.EmailorPhoneNumber))
             //    .ReverseMap()
-            //    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
+            //    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.EmailorPhoneNumber));
 
             ////--------------------------------------------------------------------------------------------------------
             //// Mapping for ApplicationUser <-> RegisterSupportDeveloper
             //CreateMap<ApplicationUser, RegisterSupportDeveloper>()
             //    .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
-            //    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+            //    .ForMember(dest => dest.EmailorPhoneNumber, opt => opt.MapFrom(src => src.EmailorPhoneNumber))
             //    .ReverseMap()
-            //    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
+            //    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.EmailorPhoneNumber));
             ////--------------------------------------------------------------------------------------------------------
             //// Mapping for ApplicationUser <-> RegisterCustomer
             //CreateMap<ApplicationUser, RegisterCompany>()
             //    .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
-            //    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+            //    .ForMember(dest => dest.EmailorPhoneNumber, opt => opt.MapFrom(src => src.EmailorPhoneNumber))
             //    .ReverseMap()
-            //    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
+            //    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.EmailorPhoneNumber));
             ////--------------------------------------------------------------------------------------------------------
             //// Mapping for ApplicationUser <-> RegisterCustomer
-            //CreateMap<ApplicationUser, RegisterEmployee>()
+            //CreateMap<ApplicationUser, RegisterCustomer>()
             //    .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
-            //    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+            //    .ForMember(dest => dest.EmailorPhoneNumber, opt => opt.MapFrom(src => src.EmailorPhoneNumber))
             //    .ReverseMap()
-            //    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
+            //    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.EmailorPhoneNumber));
             ////--------------------------------------------------------------------------------------------------------
             //// Mapping for ApplicationUser <-> AuthDTO
             //CreateMap<ApplicationUser, AuthDTO>()
-            //    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+            //    .ForMember(dest => dest.EmailorPhoneNumber, opt => opt.MapFrom(src => src.EmailorPhoneNumber))
             //    .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
             //    .ForMember(dest => dest.ProfileImage, opt => opt.Ignore()) // Manually handle file uploads
             //    .ForMember(dest => dest.ProfileImageId, opt => opt.MapFrom(src => src.ProfileId))

@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TechYardHub.Core.Entity.Application_Data
+namespace TechYardHub.Core.Helpers
 {
-    internal class ApplicationUser
+    public enum Paths
     {
+        ProfileImages,
+        Products,
+        Categories
     }
 }
