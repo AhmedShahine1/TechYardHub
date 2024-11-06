@@ -13,6 +13,7 @@ namespace TechYardHub.Core.Entity.ApplicationData
         public bool Status { get; set; } = true; // يدل على ما إذا كان الحساب نشطًا أم لا.
         public string FullName { get; set; }
         public override string? Email { get; set; }
+        public override string? PhoneNumber { get; set; }
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
         [ForeignKey(nameof(Profile))]
         public string ProfileId { get; set; }

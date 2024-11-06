@@ -1,4 +1,5 @@
-﻿using TechYardHub.BusinessLayer.Interfaces;
+﻿using TechYardHub.BusinessLayer.AutoMapper;
+using TechYardHub.BusinessLayer.Interfaces;
 using TechYardHub.BusinessLayer.Services;
 
 namespace TechYardHub.Extensions;
@@ -18,6 +19,9 @@ public static class ApplicationServicesExtensions
             options.Cookie.HttpOnly = true;
             options.Cookie.IsEssential = true;
         });
+        services.AddScoped<IAccountService, AccountService>();
+        services.AddTransient<IFileHandling, FileHandling>();
+        services.AddAutoMapper(typeof(MappingProfile));
 
         services.AddHttpClient();
         return services;

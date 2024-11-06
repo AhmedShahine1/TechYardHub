@@ -53,7 +53,6 @@ public class AccountService : IAccountService
     {
         var user = await _userManager.Users
             .Include(u => u.Profile)
-            .Include(u => u.Employee)
             .FirstOrDefaultAsync(x => x.Id == id && x.Status);
         return user;
     }
@@ -145,11 +144,11 @@ public class AccountService : IAccountService
         return result;
     }
 
-    public async Task<IdentityResult> RegisterEmployee(RegisterCustomer model)
+    public async Task<IdentityResult> RegisterCustomer(RegisterCustomer model)
     {
         if (await IsEmailExistAsync(model.Email))
         {
-            throw new ArgumentException("EmailorPhoneNumber already exists.");
+            throw new ArgumentException("Email or PhoneNumber already exists.");
         }
 
         var user = mapper.Map<ApplicationUser>(model);
@@ -164,7 +163,6 @@ public class AccountService : IAccountService
             var path = await GetPathByName("ProfileImages");
             user.ProfileId = await _fileHandling.DefaultProfile(path);
         }
-        user.OTP = RandomOTP(6);
         // Create the user
         var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -181,55 +179,11 @@ public class AccountService : IAccountService
         return result;
     }
 
-    public async Task<IdentityResult> RegisterCompany(RegisterCompany model)
-    {
-        if (await IsEmailExistAsync(model.Email))
-        {
-            throw new ArgumentException("EmailorPhoneNumber already exists.");
-        }
-
-        var user = mapper.Map<ApplicationUser>(model);
-        if (model.ImageProfile != null)
-        {
-            var path = await GetPathByName("ProfileImages");
-            user.ProfileId = await _fileHandling.UploadFile(model.ImageProfile, path);
-        }
-        else
-        {
-            var path = await GetPathByName("ProfileImages");
-            user.ProfileId = await _fileHandling.DefaultProfile(path);
-        }
-        user.OTP = RandomOTP(6);
-        user.CompanyId = user.Id;
-        bool isUnique;
-        do
-        {
-            // Generate a random 5-digit number
-            user.CompanyCode = new Random().Next(10000, 99999);
-
-            // Check if the generated code already exists
-            isUnique = _unitOfWork.UserRepository.IsExist(u => u.CompanyCode == user.CompanyCode);
-        }
-        while (isUnique); 
-        var result = await _userManager.CreateAsync(user, model.Password);
-
-        if (result.Succeeded)
-        {
-            await _userManager.AddToRoleAsync(user, "Company");
-        }
-        else
-        {
-            throw new InvalidOperationException($"Failed to create user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
-        }
-
-        return result;
-    }
-
     public async Task<IdentityResult> RegisterAdmin(RegisterAdmin model)
     {
         if (await IsEmailExistAsync(model.Email))
         {
-            throw new ArgumentException("EmailorPhoneNumber already exists.");
+            throw new ArgumentException("Email already exists.");
         }
 
         var user = mapper.Map<ApplicationUser>(model);
@@ -339,7 +293,7 @@ public class AccountService : IAccountService
 
             if (!user.EmailConfirmed)
             {
-                return (false, "405", "EmailorPhoneNumber not confirmed. Please verify your EmailorPhoneNumber.");
+                return (false, "405", "Email not confirmed. Please verify your Email.");
             }
 
             // Proceed with login
@@ -361,21 +315,6 @@ public class AccountService : IAccountService
             return false;
 
         await _signInManager.SignOutAsync();
-        return true;
-    }
-
-    public async Task<bool> ValidateOTP(string Email, string OTP)
-    {
-        var user =await _userManager.FindByNameAsync(Email);
-        //if(OTP == user.OTP)
-        //{
-        //    user.EmailConfirmed = true;
-        //    await _unitOfWork.SaveChangesAsync();
-        //    return true;
-        //}
-        user.EmailConfirmed = true;
-        await _userManager.UpdateAsync(user);
-        await _unitOfWork.SaveChangesAsync();
         return true;
     }
 

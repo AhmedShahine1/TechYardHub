@@ -36,12 +36,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         return await query.ToListAsync();
     }
 
-    public T GetById(int id)
+    public T GetById(string id)
     {
         return Context.Set<T>().Find(id);
     }
 
-    public async Task<T> GetByIdAsync(int id)
+    public async Task<T> GetByIdAsync(string id)
     {
         return await Context.Set<T>().FindAsync(id);
     }

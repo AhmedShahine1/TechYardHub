@@ -10,10 +10,15 @@ namespace TechYardHub.Core.DTO.AuthViewModel.RegisterModel
         [Required(ErrorMessage = "You should enter the Full Name"), StringLength(100)]
         public string FullName { get; set; }
 
-        [DisplayName("EmailorPhoneNumber")]
+        [DisplayName("Email")]
         [DataType(DataType.EmailAddress)]
-        [Required(ErrorMessage = "You should enter EmailorPhoneNumber")]
+        [Required(ErrorMessage = "You should enter the Email")]
         public string Email { get; set; }
+
+        [DisplayName("PhoneNumber")]
+        [DataType(DataType.PhoneNumber)]
+        [Required(ErrorMessage = "You should enter the PhoneNumber")]
+        public string PhoneNumber { get; set; }
 
         [DisplayName("Password")]
         [DataType(DataType.Password)]

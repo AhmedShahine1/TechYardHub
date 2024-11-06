@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TechYardHub.Core.Entity.ApplicationData
 {
-    [DebuggerDisplay("{roleName,nq}")]
+    [DebuggerDisplay("{Name,nq}")]
     public class ApplicationRole : IdentityRole
     {
         public string Description { get; set; }

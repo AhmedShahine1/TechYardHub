@@ -14,10 +14,9 @@ public interface IAccountService
     //Task<IdentityResult> UpdateAdmin(string adminId, RegisterAdmin model);
     Task<IdentityResult> RegisterSupportDeveloper(RegisterSupportDeveloper model);
     //Task<IdentityResult> UpdateSupportDeveloper(string SupportDeveloperId, RegisterSupportDeveloper model);
-    Task<IdentityResult> RegisterEmployee(RegisterCustomer model);
+    Task<IdentityResult> RegisterCustomer(RegisterCustomer model);
     Task<(bool IsSuccess, string Token, string ErrorMessage)> Login(LoginModel model);
     Task<bool> Logout(ApplicationUser user);
-    Task<bool> ValidateOTP(string customerPhoneNumber, string OTPV);
     Task<ApplicationUser> GetUserFromToken(string token);
     Task<string> AddRoleAsync(RoleUserModel model);
     Task<List<string>> GetRoles();

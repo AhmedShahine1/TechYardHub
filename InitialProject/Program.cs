@@ -36,6 +36,14 @@ builder.Services.AddApplicationServices(builder.Configuration);
 
 // Identity services && JWT
 builder.Services.AddIdentityServices(builder.Configuration);
+// cookies services
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Auth/Login";
+    options.LogoutPath = $"/Auth/Login";
+    options.AccessDeniedPath = $"/Auth/AccessDenied";
+});
+
 
 // Swagger Service
 builder.Services.AddSwaggerDocumentation();

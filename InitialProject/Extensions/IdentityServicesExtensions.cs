@@ -3,6 +3,7 @@ using TechYardHub.Core;
 using TechYardHub.Core.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using TechYardHub.Core.Entity.ApplicationData;
 
 
 namespace TechYardHub.Extensions;

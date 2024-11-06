@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using TechYardHub.Core.DTO.EntityDTO;
+﻿using TechYardHub.Core.DTO.AuthViewModel.RequesrLog;
 using TechYardHub.BusinessLayer.Interfaces;
 
 public class RequestResponseLoggingMiddleware

@@ -8,9 +8,5 @@ namespace TechYardHub.Core.DTO.AuthViewModel
 {
     public class DashboardViewModel
     {
-        public int CompanyUserCount { get; set; }
-        public int EmployeeUserCount { get; set; }
-        public int UsersWithoutCompanyCount { get; set; }
-        public int PostCount { get; set; }
     }
 }
