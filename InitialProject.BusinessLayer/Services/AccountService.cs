@@ -58,10 +58,10 @@ public class AccountService : IAccountService
     }
     //------------------------------------------------------------------------------------------------------------
     // Check if email or phone number already exists before creating or updating the user
-    private async Task<bool> IsEmailExistAsync(string Email, string userId = null)
+    private async Task<bool> IsEmailOrPhoneExistAsync(string email, string phoneNumber, string userId = null)
     {
         return await _userManager.Users.AnyAsync(u =>
-            (u.Email == Email) && u.Id != userId);
+            (u.Email == email || u.PhoneNumber == phoneNumber) && u.Id != userId);
     }
 
     // Helper methods for handling profile images
@@ -146,7 +146,7 @@ public class AccountService : IAccountService
 
     public async Task<IdentityResult> RegisterCustomer(RegisterCustomer model)
     {
-        if (await IsEmailExistAsync(model.Email))
+        if (await IsEmailOrPhoneExistAsync(model.Email, model.PhoneNumber))
         {
             throw new ArgumentException("Email or PhoneNumber already exists.");
         }
@@ -181,7 +181,7 @@ public class AccountService : IAccountService
 
     public async Task<IdentityResult> RegisterAdmin(RegisterAdmin model)
     {
-        if (await IsEmailExistAsync(model.Email))
+        if (await IsEmailOrPhoneExistAsync(model.Email, model.PhoneNumber))
         {
             throw new ArgumentException("Email already exists.");
         }
@@ -290,12 +290,6 @@ public class AccountService : IAccountService
             {
                 return (false, null, "Your account is deactivated. Please contact support.");
             }
-
-            if (!user.EmailConfirmed)
-            {
-                return (false, "405", "Email not confirmed. Please verify your Email.");
-            }
-
             // Proceed with login
             await _signInManager.SignInAsync(user, model.RememberMe);
             var token = await GenerateJwtToken(user);

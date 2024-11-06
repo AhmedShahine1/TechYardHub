@@ -1,5 +1,6 @@
 ﻿using TechYardHub.BusinessLayer.Interfaces;
 using TechYardHub.Core.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TechYardHub.Areas.Support.Controllers
@@ -13,7 +14,7 @@ namespace TechYardHub.Areas.Support.Controllers
         {
             _requestResponseService = requestResponseService;
         }
-
+        [Authorize(Policy = "Support Developer")]
         public async Task<IActionResult> Index()
         {
             var logs = await _requestResponseService.GetAllLogsAsync();

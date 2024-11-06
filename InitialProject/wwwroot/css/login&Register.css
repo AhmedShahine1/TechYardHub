@@ -7,59 +7,65 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    margin: 50px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Full height to center vertically within body */
 }
 
 .login-container {
     background-color: #262626;
-    padding: 40px;
+    padding: 20px;
     border-radius: 20px;
     box-shadow: 0 4px 20px 10px rgba(0, 0, 0, 0.5);
     text-align: center;
-    width: 400px;
+    width: 100%;
+    max-width: 400px; /* Restrict width on larger screens */
 }
 
-    .login-container img {
-        width: 100px;
-        margin-bottom: 20px;
-    }
+.login-container img {
+    width: 100px;
+    margin-bottom: 20px;
+}
 
-    .login-container h2 {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
+.login-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
 
 .form-control {
     background-color: #262626;
-    border: 1px solid #2c7352;
+    border: 1px solid #8F5919;
     color: white;
 }
 
-    .form-control:focus {
-        color: white;
-
-        box-shadow: none;
-        background-color: #174031;
-        border: 1px solid #2c7352;
-
-    }
+.form-control:focus {
+    color: rgb(0, 0, 0);
+    box-shadow: none;
+    background-color: #ffffff;
+    border: 1px solid #8F5919;
+}
 
 .form-check-label {
     color: #262626;
 }
-    .custom-button {
-        background-color: #262626; /* Background color for both buttons */
-        color: #fff;
-        border: 1px solid #2c7352; /* Initial border color */
-        margin-right: 10px;
-    }
 
-    .custom-button:hover {
-        background-color: #174031; /* Darker background on hover */
-        border-color: #2c7352; /* Different border color on hover */
-    }
+.custom-button {
+    background-color: #262626;
+    color: #fff;
+    border: 1px solid #8F5919;
+    margin-right: 10px;
+}
 
-    .mt-3 {
-        margin-top: 1rem;
-    }
+.custom-button:hover {
+    background-color: #a95e02;
+    border-color: #8F5919;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}

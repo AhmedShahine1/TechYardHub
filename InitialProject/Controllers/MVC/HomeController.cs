@@ -19,11 +19,7 @@ namespace TechYardHub.Controllers.MVC
 
         public async Task<IActionResult> Index()
         {
-            var viewModel = new DashboardViewModel
-            {
-            };
-
-            return View(viewModel);
+            return View();
         }
 
         // Get all Users

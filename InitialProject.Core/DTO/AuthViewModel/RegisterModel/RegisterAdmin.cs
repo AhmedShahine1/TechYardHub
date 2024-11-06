@@ -1,12 +1,6 @@
-﻿using TechYardHub.Core.Helpers;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TechYardHub.Core.DTO.AuthViewModel.RegisterModel
 {

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using TechYardHub.Core;
 using TechYardHub.Middleware;
 using TechYardHub.Extensions;
+using InitialProject.BusinessLayer.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
         sqlOptions => sqlOptions.EnableRetryOnFailure()));
+// Add this in the Startup.cs file in the ConfigureServices method
+builder.Services.AddMvc().AddViewOptions(options =>
+{
+    options.HtmlHelperOptions.ClientValidationEnabled = false;
+});
 
 // api Services
 builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true); // validation Error Api

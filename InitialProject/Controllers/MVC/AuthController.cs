@@ -73,7 +73,6 @@ namespace TechYardHub.Controllers.MVC
         }
 
         [HttpGet]
-        [HttpGet]
         public IActionResult RegisterAdmin()
         {
             return View();

@@ -3,7 +3,7 @@
     Layout = "_RegisterLayout";
 }
 <h2> انشاء حساب</h2>
-<form asp-action="RegisterAdmin" asp-controller="Auth" method="post" enctype="multipart/form-data">
+<form asp-action="Register" asp-controller="Admin" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
 
     <span class="text-danger">
