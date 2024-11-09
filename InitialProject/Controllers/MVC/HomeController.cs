@@ -26,7 +26,7 @@ namespace TechYardHub.Controllers.MVC
         public async Task<IActionResult> Users()
         {
             var users = await _dashboardService.GetAllUsersAsync();
-            return View(users);
+            return View(users.Where(a => a.Role != "Support Developer"));
         }
     }
 }

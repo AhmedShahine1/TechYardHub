@@ -21,6 +21,8 @@ public static class ApplicationServicesExtensions
         });
         services.AddScoped<IAccountService, AccountService>();
         services.AddTransient<IFileHandling, FileHandling>();
+        services.AddTransient<IDashboardService, DashboardService>();
+        services.AddTransient<ICategoryService, CategoryService>();
         services.AddAutoMapper(typeof(MappingProfile));
 
         services.AddHttpClient();

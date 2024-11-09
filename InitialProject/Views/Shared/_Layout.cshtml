@@ -1,168 +1,122 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Home</title>
-    <!-- Custom fonts for this template-->
-    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-          rel="stylesheet">
-    <!-- Custom styles for this template-->
-    <link href="~/css/Home.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Tech Yard Hub</title>
+
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
 </head>
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="@Url.Action("Index", "Home")" class="nav-link">Home</a>
+                </li>
+            </ul>
 
-<body id="page-top">
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-text mx-3">كوكبه </div>
-                <img alt="KawKaba" height="50" src="~/asset/Icon.png" width="50" />
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <img src="@HttpContextAccessor.HttpContext.Request.Cookies["UserProfile"]" alt="User Profile" class="img-circle elevation-2" style="width:30px; height:30px;">
+                        @HttpContextAccessor.HttpContext.Request.Cookies["UserName"]
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="@Url.Action("Profile", "Account")" class="dropdown-item">Profile</a>
+                        <a href="@Url.Action("Logout", "Auth")" class="dropdown-item">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="@Url.Action("Index", "Home")" class="brand-link">
+                <img src="~/asset/Icon.png" alt="Tech Yard Hub Logo" class="brand-image img-circle elevation-3">
+                <span class="brand-text font-weight-light">Tech Yard Hub</span>
             </a>
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a href="@Url.Action("Index", "Home" , new { area="" })" class="nav_link">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>
-                        Home Page
-                    </span>
-                </a>
-            </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Users
-            </div>
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-            <li class="nav-item">
-                <a href="@Url.Action("Users", "Home" , new { area="" })" class="nav_link">
-                    <i class="fas fa-users"></i>
-                    <span>
-                        Users
-                    </span>
-                </a>
-            </li>
-            <!-- Divider -->
-@*             <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Posts
-            </div> *@
-
-            <!-- Nav Item - Pages Collapse Menu -->
-@*             <li class="nav-item">
-                <a href="@Url.Action("Posts", "Home" , new { area="" })" class="nav_link">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>
-                        Posts
-                    </span>
-                </a>
-            </li> *@
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-        </ul>
-        <!-- End of Sidebar -->
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                    @{
-                        var userProfile = Context.Request.Cookies["UserProfile"];
-                        var userName = Context.Request.Cookies["UserName"];
-                    }
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">@userName</span>
-                                <img class="img-profile rounded-circle"
-                                     src="@userProfile">
-                            </a>
-                        <!-- Dropdown - User Information -->
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="@Url.Action("Index", "User")">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
+                        <!-- Main Header -->
+                        <li class="nav-header">Main</li>
+                        <!-- Admin & Support Developer: Dashboard -->
+                        @if (User.IsInRole("Admin") || User.IsInRole("Support Developer"))
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Dashboard", "Home")" class="nav-link">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>Dashboard</p>
                                 </a>
-                                <div class="dropdown-divider"></div>
-                                <!-- Logout Form -->
-                                <form id="logoutForm" action="@Url.Action("Logout", "Auth")" method="post" style="display: none;">
-                                    @Html.AntiForgeryToken()
-                                </form>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit();">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
+                            </li>
+                        }
+
+                        <!-- Users Section for Support Developer Only -->
+                        @if (User.IsInRole("Support Developer"))
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Users", "UserManagement")" class="nav-link">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>Users</p>
                                 </a>
-                            </div>
-                        </li>
+                            </li>
+                        }
                     </ul>
                 </nav>
-                <!-- End of Topbar -->
-                <!-- Begin Page Content -->
-                @RenderBody()
-                <!-- /.container-fluid -->
-
             </div>
-            <!-- End of Main Content -->
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Kawkaba 2024</span>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>@ViewData["Title"]</h1>
+                        </div>
                     </div>
                 </div>
-            </footer>
-            <!-- End of Footer -->
+            </section>
 
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </section>
         </div>
-        <!-- End of Content Wrapper -->
 
+        <!-- Footer -->
+        <footer class="main-footer text-center">
+            <strong>&copy; 2024 <a href="#">Tech Yard Hub</a>.</strong> All rights reserved.
+        </footer>
     </div>
-    <!-- End of Page Wrapper -->
-    <!-- Bootstrap core JavaScript-->
-    <script src="~/vendor/jquery/jquery.min.js"></script>
-    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- Page level plugins -->
-    <script src="~/vendor/chart.js/chart.min.js"></script>
-    <!-- Core plugin JavaScript-->
-    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="~/js/sb-admin-2.min.js"></script>
-    <!-- Page level custom scripts -->
-    <script src="~/js/demo/chart-area-demo.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+    @RenderSection("Scripts", required: false)
 
 </body>
-
 </html>

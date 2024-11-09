@@ -34,7 +34,7 @@ builder.Services.AddCors(options => {
 });
 // context && json services && IBaseRepository && IUnitOfWork Service
 builder.Services.AddContextServices(builder.Configuration);
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 // Services [IAccountService, IPhotoHandling, AddAutoMapper, Hangfire ,
 // Session , SignalR ,[ INotificationService, FcmNotificationSetting, FcmSender,ApnSender ]  ]

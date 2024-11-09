@@ -4,6 +4,7 @@ using TechYardHub.Core.DTO;
 using TechYardHub.Core.DTO.AuthViewModel.RegisterModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TechYardHub.BusinessLayer.Services;
 
 namespace TechYardHub.Areas.Admin.Controllers
 {
@@ -18,36 +19,46 @@ namespace TechYardHub.Areas.Admin.Controllers
             accountService = _accountService;
             mapper = _mapper;
         }
+
         [HttpGet]
-        public async Task<IActionResult> Register()
+        public IActionResult RegisterAdmin()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterAdmin model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterAdmin(RegisterAdmin model)
         {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Please correct the errors and try again.");
+                return View(model);
+            }
+
             try
             {
-                if (ModelState.IsValid)
+                var result = await accountService.RegisterAdmin(model);
+
+                if (result.Succeeded)
                 {
-                    var result = await accountService.RegisterAdmin(model);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index", "Home", new { area = "" });
-                    }
-                    return View(model);
+                    // Optionally, redirect to a success page or display a success message
+                    TempData["SuccessMessage"] = "Registration successful!";
+                    return RedirectToAction("Index", "Home"); // Adjust the redirection as needed
                 }
+
+                // If registration failed, display the errors
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
                 return View(model);
             }
             catch (Exception ex)
             {
-                var errorViewModel = new ErrorViewModel
-                {
-                    Message = "خطا في تسجيل البيانات",
-                    StackTrace = ex.InnerException.Message
-                };
-                return View("~/Views/Shared/Error.cshtml", errorViewModel);
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(model);
             }
         }
 

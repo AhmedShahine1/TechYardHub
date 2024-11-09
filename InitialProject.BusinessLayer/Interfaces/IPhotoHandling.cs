@@ -9,4 +9,5 @@ public interface IFileHandling
     public Task<string> UpdateFile(IFormFile file, Paths paths, string imageId);
     public Task<string> DefaultProfile(Paths paths);
     public Task<string> GetFile(string imageId);
+    Task<bool> DeleteFile(string imageId);
 }

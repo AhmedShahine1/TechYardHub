@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using TechYardHub.Core;
 using TechYardHub.Core.Entity.ApplicationData;
+using TechYardHub.Core.Entity.CategoryData;
 using TechYardHub.Core.Entity.Files;
 using TechYardHub.RepositoryLayer.Interfaces;
 
@@ -13,9 +14,9 @@ public class UnitOfWork : IUnitOfWork
     public IBaseRepository<ApplicationRole> RoleRepository { get; set; }
     public IBaseRepository<IdentityUserRole<string>> UserRoleRepository { get; set; }
 
-
     public IBaseRepository<Paths> PathsRepository { get; set; }
     public IBaseRepository<Images> ImagesRepository { get; set; }
+    public IBaseRepository<Category> CategoriesRepository { get; set; }
     public UnitOfWork(ApplicationDbContext context)
     {
         _context = context;
@@ -24,6 +25,7 @@ public class UnitOfWork : IUnitOfWork
         UserRoleRepository = new BaseRepository<IdentityUserRole<string>>(context);
         PathsRepository = new BaseRepository<Paths>(context);
         ImagesRepository = new BaseRepository<Images>(context);
+        CategoriesRepository = new BaseRepository<Category>(context);
     }
 
     public int SaveChanges()

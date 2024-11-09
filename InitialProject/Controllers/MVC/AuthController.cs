@@ -72,48 +72,6 @@ namespace TechYardHub.Controllers.MVC
             return View(model);
         }
 
-        [HttpGet]
-        public IActionResult RegisterAdmin()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RegisterAdmin(RegisterAdmin model)
-        {
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError(string.Empty, "Please correct the errors and try again.");
-                return View(model);
-            }
-
-            try
-            {
-                var result = await _accountService.RegisterAdmin(model);
-
-                if (result.Succeeded)
-                {
-                    // Optionally, redirect to a success page or display a success message
-                    TempData["SuccessMessage"] = "Registration successful!";
-                    return RedirectToAction("Index", "Home"); // Adjust the redirection as needed
-                }
-
-                // If registration failed, display the errors
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-
-                return View(model);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
-                return View(model);
-            }
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()

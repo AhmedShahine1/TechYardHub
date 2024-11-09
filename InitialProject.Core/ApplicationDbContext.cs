@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TechYardHub.Core.Entity.ApplicationData;
+using TechYardHub.Core.Entity.CategoryData;
 using TechYardHub.Core.Entity.Files;
 
 namespace TechYardHub.Core
@@ -24,6 +20,7 @@ namespace TechYardHub.Core
         public virtual DbSet<Paths> Paths { get; set; }
         public virtual DbSet<Images> Images { get; set; }
         //----------------------------------------------------------------------------------
+        public virtual DbSet<Category> Categories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

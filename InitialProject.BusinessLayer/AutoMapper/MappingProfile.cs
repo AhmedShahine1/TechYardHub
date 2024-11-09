@@ -1,10 +1,11 @@
 ﻿
 using AutoMapper;
-using TechYardHub.Core.DTO.AuthViewModel;
+using TechYardHub.Core.DTO.AuthViewModel.CategoryModel;
 using TechYardHub.Core.DTO.AuthViewModel.FilesModel;
 using TechYardHub.Core.DTO.AuthViewModel.RegisterModel;
 using TechYardHub.Core.DTO.AuthViewModel.RoleModel;
 using TechYardHub.Core.Entity.ApplicationData;
+using TechYardHub.Core.Entity.CategoryData;
 using TechYardHub.Core.Entity.Files;
 
 namespace TechYardHub.BusinessLayer.AutoMapper
@@ -49,7 +50,14 @@ namespace TechYardHub.BusinessLayer.AutoMapper
                .ForMember(dest => dest.Profile, opt => opt.Ignore()) 
                .ReverseMap()
                .ForMember(dest => dest.ImageProfile, opt => opt.Ignore());
+            //--------------------------------------------------------------------------------------------------------
+            // Mapping for CategoryDto <-> Category
+            CreateMap<Category, CategoryDto>()
+                .ForMember(dest => dest.Image, opt => opt.Ignore())
+                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
 
+            CreateMap<CategoryDto, Category>()
+                .ForMember(dest => dest.image, opt => opt.Ignore());
         }
     }
 }
