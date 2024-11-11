@@ -1,0 +1,222 @@
+﻿@model ProductDto
+@{
+    ViewBag.Title = "Edit Product";
+}
+
+<form asp-action="Edit" asp-route-id="@Model.Id" enctype="multipart/form-data">
+    <!-- Name Field -->
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <!-- Description Field -->
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <!-- Price Field -->
+    <div class="form-group">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <!-- Category Dropdown -->
+    <div class="form-group">
+        <label asp-for="CategoryId">Category</label>
+        <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name", Model.CategoryId))">
+            <option value="">Select Category</option>
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <!-- Processors -->
+    <div class="form-group">
+        <label>Processors</label>
+        <div id="processorsContainer">
+            @foreach (var processor in Model.Processors ?? new List<string>())
+            {
+                <input type="text" name="Processors" value="@processor" class="form-control mb-2" />
+            }
+        </div>
+        <button type="button" onclick="addField('processorsContainer', 'Processors')" class="btn btn-secondary">Add Processor</button>
+    </div>
+
+    <!-- RAM -->
+    <div class="form-group">
+        <label>RAM</label>
+        <div id="ramContainer">
+            @foreach (var ram in Model.RAM ?? new List<string>())
+            {
+                <input type="text" name="RAM" value="@ram" class="form-control mb-2" />
+            }
+        </div>
+        <button type="button" onclick="addField('ramContainer', 'RAM')" class="btn btn-secondary">Add RAM</button>
+    </div>
+
+    <!-- Storage -->
+    <div class="form-group">
+        <label>Storage</label>
+        <div id="storageContainer">
+            @foreach (var storage in Model.Storage ?? new List<string>())
+            {
+                <input type="text" name="Storage" value="@storage" class="form-control mb-2" />
+            }
+        </div>
+        <button type="button" onclick="addField('storageContainer', 'Storage')" class="btn btn-secondary">Add Storage</button>
+    </div>
+
+    <!-- Graphics Cards -->
+    <div class="form-group">
+        <label>Graphics Cards</label>
+        <div id="graphicsCardsContainer">
+            @foreach (var graphicsCard in Model.GraphicsCards ?? new List<string>())
+            {
+                <input type="text" name="GraphicsCards" value="@graphicsCard" class="form-control mb-2" />
+            }
+        </div>
+        <button type="button" onclick="addField('graphicsCardsContainer', 'GraphicsCards')" class="btn btn-secondary">Add Graphics Card</button>
+    </div>
+
+    <!-- Screen Sizes -->
+    <div class="form-group">
+        <label>Screen Sizes</label>
+        <div id="screenSizesContainer">
+            @foreach (var screenSize in Model.ScreenSizes ?? new List<string>())
+            {
+                <input type="text" name="ScreenSizes" value="@screenSize" class="form-control mb-2" />
+            }
+        </div>
+        <button type="button" onclick="addField('screenSizesContainer', 'ScreenSizes')" class="btn btn-secondary">Add Screen Size</button>
+    </div>
+
+    <!-- Operating Systems -->
+    <div class="form-group">
+        <label>Operating Systems</label>
+        <div id="OperatingSystemsContainer">
+            @foreach (var os in Model.OperatingSystems ?? new List<string>())
+            {
+                <input type="text" name="OperatingSystems" value="@os" class="form-control mb-2" />
+            }
+        </div>
+        <button type="button" onclick="addField('OperatingSystemsContainer', 'OperatingSystems')" class="btn btn-secondary">Add Operating System</button>
+    </div>
+
+    <!-- Battery Lives -->
+    <div class="form-group">
+        <label>Battery Lives</label>
+        <div id="BatteryLivesContainer">
+            @foreach (var batteryLife in Model.BatteryLives ?? new List<string>())
+            {
+                <input type="text" name="BatteryLives" value="@batteryLife" class="form-control mb-2" />
+            }
+        </div>
+        <button type="button" onclick="addField('BatteryLivesContainer', 'BatteryLives')" class="btn btn-secondary">Add Battery Life</button>
+    </div>
+
+    <!-- Mac Model -->
+    <div class="form-group">
+        <label asp-for="MacModel"></label>
+        <input asp-for="MacModel" class="form-control" />
+        <span asp-validation-for="MacModel" class="text-danger"></span>
+    </div>
+
+    <!-- Display Resolution -->
+    <div class="form-group">
+        <label asp-for="DisplayResolution"></label>
+        <input asp-for="DisplayResolution" class="form-control" />
+        <span asp-validation-for="DisplayResolution" class="text-danger"></span>
+    </div>
+
+    <!-- Ports -->
+    <div class="form-group">
+        <label>Ports</label>
+        <div id="portsContainer">
+            @foreach (var port in Model.Ports ?? new List<string>())
+            {
+                <input type="text" name="Ports" value="@port" class="form-control mb-2" />
+            }
+        </div>
+        <button type="button" onclick="addField('portsContainer', 'Ports')" class="btn btn-secondary">Add Port</button>
+    </div>
+
+    <!-- Webcam -->
+    <div class="form-group">
+        <label asp-for="Webcam"></label>
+        <input asp-for="Webcam" class="form-control" />
+        <span asp-validation-for="Webcam" class="text-danger"></span>
+    </div>
+
+    <!-- Weight -->
+    <div class="form-group">
+        <label asp-for="Weight"></label>
+        <input asp-for="Weight" class="form-control" />
+        <span asp-validation-for="Weight" class="text-danger"></span>
+    </div>
+
+    <!-- Color -->
+    <div class="form-group">
+        <label asp-for="Color"></label>
+        <input asp-for="Color" class="form-control" />
+        <span asp-validation-for="Color" class="text-danger"></span>
+    </div>
+
+    <!-- Connectivity -->
+    <div class="form-group">
+        <label asp-for="Connectivity"></label>
+        <input asp-for="Connectivity" class="form-control" />
+        <span asp-validation-for="Connectivity" class="text-danger"></span>
+    </div>
+
+    <!-- Additional Properties -->
+    <div class="form-group">
+        <label asp-for="KeyboardType"></label>
+        <input asp-for="KeyboardType" class="form-control" />
+        <span asp-validation-for="KeyboardType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TouchBar"></label>
+        <input asp-for="TouchBar" class="form-control" />
+        <span asp-validation-for="TouchBar" class="text-danger"></span>
+    </div>
+
+    <!-- Upload Images -->
+    <div class="form-group">
+        <label>Upload Images</label>
+        <div id="imagesContainer">
+            <input type="file" name="Images" class="form-control-file mb-2" />
+        </div>
+        <button type="button" onclick="addFileInput('imagesContainer', 'Images')" class="btn btn-secondary">Add Another Image</button>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary">Update Product</button>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        function addField(containerId, inputName) {
+            const container = document.getElementById(containerId);
+            const input = document.createElement("input");
+            input.type = "text";
+            input.name = inputName;
+            input.classList.add("form-control", "mb-2");
+            container.appendChild(input);
+        }
+
+        function addFileInput(containerId, inputName) {
+            const container = document.getElementById(containerId);
+            const input = document.createElement("input");
+            input.type = "file";
+            input.name = inputName;
+            input.classList.add("form-control-file", "mb-2");
+            container.appendChild(input);
+        }
+    </script>
+}

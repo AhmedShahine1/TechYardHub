@@ -23,6 +23,7 @@ public static class ApplicationServicesExtensions
         services.AddTransient<IFileHandling, FileHandling>();
         services.AddTransient<IDashboardService, DashboardService>();
         services.AddTransient<ICategoryService, CategoryService>();
+        services.AddTransient<IProductService, ProductService>();
         services.AddAutoMapper(typeof(MappingProfile));
 
         services.AddHttpClient();

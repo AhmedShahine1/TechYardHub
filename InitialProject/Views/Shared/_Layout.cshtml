@@ -56,24 +56,68 @@
 
                         <!-- Main Header -->
                         <li class="nav-header">Main</li>
+
                         <!-- Admin & Support Developer: Dashboard -->
-                        @if (User.IsInRole("Admin") || User.IsInRole("Support Developer"))
+                        <li class="nav-item">
+                            <a href="@Url.Action("Dashboard", "Home")" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <!-- Support Developer Role Specific Links -->
+                        @if (User.IsInRole("Support Developer"))
                         {
+                            <!-- Support Developer Section -->
                             <li class="nav-item">
-                                <a href="@Url.Action("Dashboard", "Home")" class="nav-link">
-                                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                                    <p>Dashboard</p>
+                                <a href="@Url.Action("Register", "SupportDeveloper", new { area = "Support" })" class="nav-link">
+                                    <i class="nav-icon fas fa-user-plus"></i>
+                                    <p>Register Support Developer</p>
+                                </a>
+                            </li>
+                            <!-- Role Section -->
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "Role", new { area = "Support" })" class="nav-link">
+                                    <i class="nav-icon fas fa-users-cog"></i>
+                                    <p>Roles</p>
+                                </a>
+                            </li>
+                            <!-- Request Response Viewer Section -->
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "RequestResponseViewer", new { area = "Support" })" class="nav-link">
+                                    <i class="nav-icon fas fa-eye"></i>
+                                    <p>Request Response Viewer</p>
+                                </a>
+                            </li>
+                            <!-- Path Section -->
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "Path", new { area = "Support" })" class="nav-link">
+                                    <i class="nav-icon fas fa-map"></i>
+                                    <p>Paths</p>
                                 </a>
                             </li>
                         }
-
-                        <!-- Users Section for Support Developer Only -->
-                        @if (User.IsInRole("Support Developer"))
+                        <!-- Admin Role Specific Links -->
+                        @if (User.IsInRole("Admin") || User.IsInRole("Support Developer"))
                         {
+                            <!-- Admin Section -->
                             <li class="nav-item">
-                                <a href="@Url.Action("Users", "UserManagement")" class="nav-link">
-                                    <i class="nav-icon fas fa-users"></i>
-                                    <p>Users</p>
+                                <a href="@Url.Action("RegisterAdmin", "Admin", new { area = "Admin" })" class="nav-link">
+                                    <i class="nav-icon fas fa-user-plus"></i>
+                                    <p>Register Admin</p>
+                                </a>
+                            </li>
+                            <!-- Products Section -->
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "Products", new { area = "Admin" })" class="nav-link">
+                                    <i class="nav-icon fas fa-box"></i>
+                                    <p>Products</p>
+                                </a>
+                            </li>
+                            <!-- Categories Section -->
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "Category", new { area = "Admin" })" class="nav-link">
+                                    <i class="nav-icon fas fa-list"></i>
+                                    <p>Categories</p>
                                 </a>
                             </li>
                         }

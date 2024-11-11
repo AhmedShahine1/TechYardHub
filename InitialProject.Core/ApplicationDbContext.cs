@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using TechYardHub.Core.Entity.ApplicationData;
 using TechYardHub.Core.Entity.CategoryData;
 using TechYardHub.Core.Entity.Files;
+using TechYardHub.Core.Entity.ProductData;
 
 namespace TechYardHub.Core
 {
@@ -21,6 +22,7 @@ namespace TechYardHub.Core
         public virtual DbSet<Images> Images { get; set; }
         //----------------------------------------------------------------------------------
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -41,6 +43,10 @@ namespace TechYardHub.Core
             modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin", "dbo");
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens", "dbo");
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims", "dbo");
+
+            modelBuilder.Entity<Product>()
+           .Property(p => p.Price)
+           .HasColumnType("decimal(18,2)");
         }
     }
 }

@@ -1,0 +1,188 @@
+﻿@model ProductDto
+
+<h2>Product Details</h2>
+
+<table class="table">
+    <tbody>
+        <!-- Product Name -->
+        <tr>
+            <th>Name</th>
+            <td>@Model.Name</td>
+        </tr>
+
+        <!-- Product Description -->
+        <tr>
+            <th>Description</th>
+            <td>@Model.Description</td>
+        </tr>
+
+        <!-- Product Price -->
+        <tr>
+            <th>Price</th>
+            <td>@Model.Price</td>
+        </tr>
+
+        <!-- Category Name -->
+        <tr>
+            <th>Category</th>
+            <td>@Model.Category?.name</td>
+        </tr>
+
+        <!-- Display Mac-specific details if the MacModel is set -->
+        @if (!string.IsNullOrEmpty(Model.MacModel))
+        {
+            <tr>
+                <th>Mac Model</th>
+                <td>@Model.MacModel</td>
+            </tr>
+            <tr>
+                <th>Display Resolution</th>
+                <td>@Model.DisplayResolution</td>
+            </tr>
+            <tr>
+                <th>Weight</th>
+                <td>@Model.Weight</td>
+            </tr>
+            <tr>
+                <th>Color</th>
+                <td>@Model.Color</td>
+            </tr>
+            <tr>
+                <th>Connectivity</th>
+                <td>@Model.Connectivity</td>
+            </tr>
+            <tr>
+                <th>Keyboard Type</th>
+                <td>@Model.KeyboardType</td>
+            </tr>
+            <tr>
+                <th>Touch Bar</th>
+                <td>@Model.TouchBar</td>
+            </tr>
+
+            <!-- Processor, RAM, Storage, etc. -->
+            @if (Model.Processors != null && Model.Processors.Any())
+            {
+                <tr>
+                    <th>Processors</th>
+                    <td>@string.Join(", ", Model.Processors)</td>
+                </tr>
+            }
+            @if (Model.RAM != null && Model.RAM.Any())
+            {
+                <tr>
+                    <th>RAM</th>
+                    <td>@string.Join(", ", Model.RAM)</td>
+                </tr>
+            }
+            @if (Model.Storage != null && Model.Storage.Any())
+            {
+                <tr>
+                    <th>Storage</th>
+                    <td>@string.Join(", ", Model.Storage)</td>
+                </tr>
+            }
+            @if (Model.GraphicsCards != null && Model.GraphicsCards.Any())
+            {
+                <tr>
+                    <th>Graphics Cards</th>
+                    <td>@string.Join(", ", Model.GraphicsCards)</td>
+                </tr>
+            }
+            @if (Model.ScreenSizes != null && Model.ScreenSizes.Any())
+            {
+                <tr>
+                    <th>Screen Sizes</th>
+                    <td>@string.Join(", ", Model.ScreenSizes)</td>
+                </tr>
+            }
+            @if (Model.BatteryLives != null && Model.BatteryLives.Any())
+            {
+                <tr>
+                    <th>Battery Life</th>
+                    <td>@string.Join(", ", Model.BatteryLives)</td>
+                </tr>
+            }
+            @if (Model.OperatingSystems != null && Model.OperatingSystems.Any())
+            {
+                <tr>
+                    <th>Operating Systems</th>
+                    <td>@string.Join(", ", Model.OperatingSystems)</td>
+                </tr>
+            }
+            @if (Model.Ports != null && Model.Ports.Any())
+            {
+                <tr>
+                    <th>Ports</th>
+                    <td>@string.Join(", ", Model.Ports)</td>
+                </tr>
+            }
+            @if (!string.IsNullOrEmpty(Model.Webcam))
+            {
+                <tr>
+                    <th>Webcam</th>
+                    <td>@Model.Webcam</td>
+                </tr>
+            }
+        }
+
+        <!-- Display Images if any -->
+        @if (Model.ImageUrls != null && Model.ImageUrls.Any())
+        {
+            <tr>
+                <th>Images</th>
+                <td>
+                    @foreach (var imageUrl in Model.ImageUrls)
+                    {
+                        <img src="@imageUrl" alt="Product Image" style="width: 300px; height: 300px; margin-right: 10px;" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- AdminLTE Delete Confirmation Modal for Details -->
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="openDeleteModal('@Model.Id', '@Model.Name')">Delete</button>
+
+<!-- Same Modal Code -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the product "<span id="product-name"></span>"? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let deleteProductId = '';
+        let deleteProductName = '';
+
+        // Open the delete modal and set the product details
+        function openDeleteModal(productId, productName) {
+            deleteProductId = productId;
+            deleteProductName = productName;
+            document.getElementById('product-name').textContent = deleteProductName;
+
+            // Update the form action with the product ID
+            const deleteForm = document.getElementById('deleteForm');
+            deleteForm.action = '/Admin/Products/Delete/' + deleteProductId;
+        }
+    </script>
+}

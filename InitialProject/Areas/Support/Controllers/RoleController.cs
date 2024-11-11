@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace TechYardHub.Areas.Support.Controllers
 {
     [Area("Support")]
-    //[Authorize(Policy = "Support Developer")]
+    [Authorize(Policy = "Support Developer")]
     public class RoleController : Controller
     {
         private readonly IMapper mapper;

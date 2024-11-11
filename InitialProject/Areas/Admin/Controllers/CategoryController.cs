@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TechYardHub.BusinessLayer.Interfaces;
 using TechYardHub.Core.DTO.AuthViewModel.CategoryModel;
 
 namespace TechYardHub.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Policy = "Admin")]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;

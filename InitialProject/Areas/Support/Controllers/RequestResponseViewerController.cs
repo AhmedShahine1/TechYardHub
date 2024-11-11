@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace TechYardHub.Areas.Support.Controllers
 {
     [Area("Support")]
+    [Authorize(Policy = "Support Developer")]
     public class RequestResponseViewerController : Controller
     {
         private readonly IRequestResponseService _requestResponseService;

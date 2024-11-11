@@ -12,26 +12,26 @@ namespace TechYardHub.Core.Entity.ProductData
         public decimal Price { get; set; }
 
         // Foreign key to the Category
-        [ForeignKey(nameof(Category))]
         public string CategoryId { get; set; }
+        [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; }
 
         // Collection for multiple images
         public ICollection<Images> Images { get; set; } = new List<Images>();
 
         // Apple-specific properties for different types of Macs
-        public List<string>? Processors { get; set; } = new List<string>();
-        public List<string>? RAM { get; set; } = new List<string>();
-        public List<string>? Storage { get; set; } = new List<string>();
-        public List<string>? GraphicsCards { get; set; } = new List<string>();
-        public List<string>? ScreenSizes { get; set; } = new List<string>();
-        public List<string>? BatteryLives { get; set; } = new List<string>();
-        public List<string>? OperatingSystems { get; set; } = new List<string>();
+        public List<string> Processors { get; set; } = new List<string>();
+        public List<string> RAM { get; set; } = new List<string>();
+        public List<string> Storage { get; set; } = new List<string>();
+        public List<string> GraphicsCards { get; set; } = new List<string>();
+        public List<string> ScreenSizes { get; set; } = new List<string>();
+        public List<string> BatteryLives { get; set; } = new List<string>();
+        public List<string> OperatingSystems { get; set; } = new List<string>();
 
         // Specific properties for different Mac models
         public string? MacModel { get; set; } // "MacBook", "iMac", "Mac Mini", etc.
         public string? DisplayResolution { get; set; }
-        public List<string>? Ports { get; set; } = new List<string>();
+        public List<string> Ports { get; set; } = new List<string>();
         public string? Webcam { get; set; }
         public string? Weight { get; set; }
         public string? Color { get; set; }

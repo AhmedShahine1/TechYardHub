@@ -10,7 +10,7 @@ using TechYardHub.Core.DTO;
 namespace TechYardHub.Areas.Support.Controllers
 {
     [Area("Support")]
-    //[Authorize(Policy = "Support Developer")]
+    [Authorize(Policy = "Support Developer")]
     public class SupportDeveloperController : Controller
     {
         private readonly IAccountService accountService;
