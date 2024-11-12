@@ -21,7 +21,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="@Url.Action("Index", "Home")" class="nav-link">Home</a>
+                    <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="nav-link">Home</a>
                 </li>
             </ul>
 
@@ -43,7 +43,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="@Url.Action("Index", "Home")" class="brand-link">
+            <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="brand-link">
                 <img src="~/asset/Icon.png" alt="Tech Yard Hub Logo" class="brand-image img-circle elevation-3">
                 <span class="brand-text font-weight-light">Tech Yard Hub</span>
             </a>
@@ -59,7 +59,7 @@
 
                         <!-- Admin & Support Developer: Dashboard -->
                         <li class="nav-item">
-                            <a href="@Url.Action("Index", "Home", new { area = "" })" class="nav-link">
+                            <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -74,6 +74,7 @@
                                     <p>Register Support Developer</p>
                                 </a>
                             </li>
+
                             <!-- Role Section -->
                             <li class="nav-item">
                                 <a href="@Url.Action("Index", "Role", new { area = "Support" })" class="nav-link">
@@ -81,6 +82,15 @@
                                     <p>Roles</p>
                                 </a>
                             </li>
+
+                            <!-- AdminUsers Section -->
+                            <li class="nav-item">
+                                <a href="@Url.Action("AdminUsers", "Dashboard", new { area = "Admin" })" class="nav-link">
+                                    <i class="nav-icon fas fa-user-shield"></i> <!-- Updated Icon -->
+                                    <p>Admin Users</p>
+                                </a>
+                            </li>
+
                             <!-- Request Response Viewer Section -->
                             <li class="nav-item">
                                 <a href="@Url.Action("Index", "RequestResponseViewer", new { area = "Support" })" class="nav-link">
@@ -88,6 +98,7 @@
                                     <p>Request Response Viewer</p>
                                 </a>
                             </li>
+
                             <!-- Path Section -->
                             <li class="nav-item">
                                 <a href="@Url.Action("Index", "Path", new { area = "Support" })" class="nav-link">
@@ -96,6 +107,7 @@
                                 </a>
                             </li>
                         }
+
                         <!-- Admin Role Specific Links -->
                         @if (User.IsInRole("Admin") || User.IsInRole("Support Developer"))
                         {
@@ -106,6 +118,15 @@
                                     <p>Register Admin</p>
                                 </a>
                             </li>
+
+                            <!-- CustomerUsers Section -->
+                            <li class="nav-item">
+                                <a href="@Url.Action("CustomerUsers", "Dashboard", new { area = "Admin" })" class="nav-link">
+                                    <i class="nav-icon fas fa-users"></i> <!-- Updated Icon -->
+                                    <p>Customer Users</p>
+                                </a>
+                            </li>
+
                             <!-- Products Section -->
                             <li class="nav-item">
                                 <a href="@Url.Action("Index", "Products", new { area = "Admin" })" class="nav-link">
@@ -113,6 +134,7 @@
                                     <p>Products</p>
                                 </a>
                             </li>
+
                             <!-- Categories Section -->
                             <li class="nav-item">
                                 <a href="@Url.Action("Index", "Category", new { area = "Admin" })" class="nav-link">

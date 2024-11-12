@@ -1,0 +1,59 @@
+﻿@model DashboardViewModel
+
+<div class="row">
+    <!-- Categories Widget -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>@Model.TotalCategories</h3>
+                <p>Total Categories</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-th"></i>
+            </div>
+            <a href="@Url.Action("Index", "Category")" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+
+    <!-- Admins Widget -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>@Model.TotalAdmins</h3>
+                <p>Total Admins</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-users-cog"></i>
+            </div>
+            <a href="@Url.Action("AdminUsers", "Dashboard")" class="small-box-footer">View Admin Users <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+
+    <!-- Customers Widget -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>@Model.TotalCustomers</h3>
+                <p>Total Customers</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <a href="@Url.Action("CustomerUsers", "Dashboard")" class="small-box-footer">View Customer Users <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+
+    <!-- Products Widget -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>@Model.TotalProducts</h3>
+                <p>Total Products</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-box"></i>
+            </div>
+            <a href="@Url.Action("Index", "Products")" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+</div>

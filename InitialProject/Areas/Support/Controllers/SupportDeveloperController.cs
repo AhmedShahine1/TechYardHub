@@ -56,7 +56,7 @@ namespace TechYardHub.Areas.Support.Controllers
                 if (result.Succeeded)
                 {
                     TempData["SuccessMessage"] = "Registration successful!";
-                    return RedirectToAction("Index", "Home"); // Adjust redirection as needed
+                    return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
                 }
 
                 // If registration failed, display the errors

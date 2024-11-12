@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using TechYardHub.Core.DTO.AuthViewModel;
 using TechYardHub.Core.DTO.AuthViewModel.CategoryModel;
 using TechYardHub.Core.DTO.AuthViewModel.FilesModel;
 using TechYardHub.Core.DTO.AuthViewModel.ProductModel;
@@ -30,6 +31,23 @@ namespace TechYardHub.BusinessLayer.AutoMapper
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ReverseMap();
+
+            // Map from ApplicationUser to AuthDTO
+            CreateMap<ApplicationUser, AuthDTO>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                .ForMember(dest => dest.Token, opt => opt.Ignore()) 
+                .ForMember(dest => dest.ProfileImage, opt => opt.Ignore())
+                .ForMember(dest => dest.ProfileImageId, opt => opt.MapFrom(src => src.ProfileId));
+
+            // Map from AuthDTO to ApplicationUser
+            CreateMap<AuthDTO, ApplicationUser>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.ProfileId, opt => opt.MapFrom(src => src.ProfileImageId));
 
             //--------------------------------------------------------------------------------------------------------
             // Mapping for ApplicationUser <-> RegisterSupportDeveloper
@@ -65,6 +83,7 @@ namespace TechYardHub.BusinessLayer.AutoMapper
             CreateMap<Product, ProductDto>()
                 .ForMember(dest => dest.Images, opt => opt.Ignore()) // Ignoring file upload (handled separately)
                 .ForMember(dest => dest.ImageUrls, opt => opt.Ignore())
+                .ForMember(dest => dest.Category, opt => opt.Ignore())
                 .ForMember(dest => dest.Processors, opt => opt.MapFrom(src => src.Processors != null ? src.Processors : new List<string>()))
                 .ForMember(dest => dest.RAM, opt => opt.MapFrom(src => src.RAM != null ? src.RAM : new List<string>()))
                 .ForMember(dest => dest.Storage, opt => opt.MapFrom(src => src.Storage != null ? src.Storage : new List<string>()))

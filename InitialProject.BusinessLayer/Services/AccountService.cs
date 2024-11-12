@@ -294,7 +294,13 @@ public class AccountService : IAccountService
     {
         try
         {
-            var user = await _userManager.FindByNameAsync(model.EmailorPhoneNumber);
+            var user = await FindByEmailAsync(model.EmailorPhoneNumber);
+
+            // If no user is found by email, attempt to find by phone number
+            if (user == null)
+            {
+                user = await FindByPhoneNumberAsync(model.EmailorPhoneNumber);
+            }
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 return (false, null, "Invalid login attempt.");

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TechYardHub.Core.DTO.AuthViewModel.CategoryModel;
 using TechYardHub.Core.Entity.CategoryData;
 
 namespace TechYardHub.Core.DTO.AuthViewModel.ProductModel
@@ -24,7 +25,7 @@ namespace TechYardHub.Core.DTO.AuthViewModel.ProductModel
 
         [Required(ErrorMessage = "Please select a category.")]
         public string CategoryId { get; set; }
-        public Category? Category { get; set; }
+        public CategoryDto? Category { get; set; }
 
         public List<string> ImageUrls { get; set; } = new List<string>();
 

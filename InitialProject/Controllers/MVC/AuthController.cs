@@ -64,7 +64,7 @@ namespace TechYardHub.Controllers.MVC
                 }
                 else
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
                 }
             }
 
@@ -86,7 +86,7 @@ namespace TechYardHub.Controllers.MVC
                 }
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
         }
     }
 }

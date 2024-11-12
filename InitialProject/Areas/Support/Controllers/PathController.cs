@@ -69,7 +69,7 @@ namespace TechYardHub.Areas.Support.Controllers
                 if (ModelState.IsValid)
                 {
                     // Check for duplicate Path Name
-                    var existingPath = await unitOfWork.PathsRepository.GetFirstOrDefaultAsync(p => p.Name == pathsModel.Name);
+                    var existingPath = await unitOfWork.PathsRepository.FindAsync(p => p.Name == pathsModel.Name);
                     if (existingPath != null)
                     {
                         ModelState.AddModelError("Name", "Path name already exists. Please choose a different name.");
@@ -134,7 +134,7 @@ namespace TechYardHub.Areas.Support.Controllers
                     }
 
                     // Prevent duplicate Path Name (ignoring the current path)
-                    var duplicatePath = await unitOfWork.PathsRepository.GetFirstOrDefaultAsync(p => p.Name == pathsModel.Name && p.Id != id);
+                    var duplicatePath = await unitOfWork.PathsRepository.FindAsync(p => p.Name == pathsModel.Name && p.Id != id);
                     if (duplicatePath != null)
                     {
                         ModelState.AddModelError("Name", "Path name already exists. Please choose a different name.");

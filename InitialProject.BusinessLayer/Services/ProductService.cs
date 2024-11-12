@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using TechYardHub.BusinessLayer.Interfaces;
 using TechYardHub.Core.DTO.AuthViewModel.CategoryModel;
 using TechYardHub.Core.DTO.AuthViewModel.ProductModel;
-using TechYardHub.Core.Entity.CategoryData;
 using TechYardHub.Core.Entity.Files;
 using TechYardHub.Core.Entity.ProductData;
 using TechYardHub.RepositoryLayer.Interfaces;
@@ -40,6 +39,7 @@ namespace TechYardHub.BusinessLayer.Services
                 {
                     productDto.ImageUrls.Add(await _fileHandling.GetFile(image.Id));
                 }
+                productDto.Category = await _categoryService.GetCategoryByIdAsync(product.CategoryId);
             }
 
             return productDto;

@@ -10,6 +10,10 @@ namespace TechYardHub.BusinessLayer.Interfaces
 {
     public interface IDashboardService
     {
-        Task<IEnumerable<AuthDTO>> GetAllUsersAsync();
+        Task<List<AuthDTO>> GetAllUsersExcludingRolesAsync(List<string> rolesToExclude);
+        Task<int> GetTotalCategoriesAsync();
+        Task<int> GetTotalAdminsAsync();
+        Task<int> GetTotalCustomersAsync();
+        Task<int> GetTotalProductsAsync();
     }
 }
