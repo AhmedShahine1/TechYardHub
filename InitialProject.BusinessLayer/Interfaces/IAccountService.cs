@@ -10,10 +10,10 @@ namespace TechYardHub.BusinessLayer.Interfaces;
 public interface IAccountService
 {
     Task<ApplicationUser> GetUserById(string id);
+    Task<ApplicationUser> FindByEmailAsync(string email);
+    Task<ApplicationUser> FindByPhoneNumberAsync(string phoneNumber);
     Task<IdentityResult> RegisterAdmin(RegisterAdmin model);
-    //Task<IdentityResult> UpdateAdmin(string adminId, RegisterAdmin model);
     Task<IdentityResult> RegisterSupportDeveloper(RegisterSupportDeveloper model);
-    //Task<IdentityResult> UpdateSupportDeveloper(string SupportDeveloperId, RegisterSupportDeveloper model);
     Task<IdentityResult> RegisterCustomer(RegisterCustomer model);
     Task<(bool IsSuccess, string Token, string ErrorMessage)> Login(LoginModel model);
     Task<bool> Logout(ApplicationUser user);

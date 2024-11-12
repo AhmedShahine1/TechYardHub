@@ -68,10 +68,19 @@ namespace TechYardHub.Areas.Support.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    // Check for duplicate Path Name
+                    var existingPath = await unitOfWork.PathsRepository.GetFirstOrDefaultAsync(p => p.Name == pathsModel.Name);
+                    if (existingPath != null)
+                    {
+                        ModelState.AddModelError("Name", "Path name already exists. Please choose a different name.");
+                        return View(pathsModel);
+                    }
+
                     var paths = mapper.Map<Paths>(pathsModel);
                     await unitOfWork.PathsRepository.AddAsync(paths);
                     await unitOfWork.SaveChangesAsync();
                     memoryCache.Remove(CacheKey); // Clear cache
+
                     return RedirectToAction(nameof(Index));
                 }
                 return View(pathsModel);
@@ -80,7 +89,7 @@ namespace TechYardHub.Areas.Support.Controllers
             {
                 var errorViewModel = new ErrorViewModel
                 {
-                    Message = "خطا في حفظ البيانات",
+                    Message = "Error saving data",
                     StackTrace = ex.StackTrace
                 };
                 return View("~/Views/Shared/Error.cshtml", errorViewModel);
@@ -112,25 +121,44 @@ namespace TechYardHub.Areas.Support.Controllers
         // POST: PathController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Paths paths)
+        public async Task<IActionResult> Edit(PathsModel pathsModel, string id)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    unitOfWork.PathsRepository.Update(paths);
+                    var pathToUpdate = await unitOfWork.PathsRepository.GetByIdAsync(id);
+                    if (pathToUpdate == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Prevent duplicate Path Name (ignoring the current path)
+                    var duplicatePath = await unitOfWork.PathsRepository.GetFirstOrDefaultAsync(p => p.Name == pathsModel.Name && p.Id != id);
+                    if (duplicatePath != null)
+                    {
+                        ModelState.AddModelError("Name", "Path name already exists. Please choose a different name.");
+                        return View(pathsModel);
+                    }
+
+                    // Map updated data to the existing path entity
+                    pathToUpdate.Name = pathsModel.Name;
+                    pathToUpdate.Description = pathsModel.Description;
+
+                    unitOfWork.PathsRepository.Update(pathToUpdate);
                     await unitOfWork.SaveChangesAsync();
                     memoryCache.Remove(CacheKey); // Clear cache
-                    ViewBag.Message = "تم تعديل البيانات بنجاح";
+
+                    ViewBag.Message = "Data updated successfully";
                     return RedirectToAction(nameof(Index));
                 }
-                return View(paths);
+                return View(pathsModel);
             }
             catch (Exception ex)
             {
                 var errorViewModel = new ErrorViewModel
                 {
-                    Message = "خطا في تعديل البيانات",
+                    Message = "Error updating data",
                     StackTrace = ex.StackTrace
                 };
                 return View("~/Views/Shared/Error.cshtml", errorViewModel);
@@ -144,20 +172,24 @@ namespace TechYardHub.Areas.Support.Controllers
         {
             try
             {
-                var Path = (memoryCache.TryGetValue(CacheKey, out IEnumerable<Paths>? Paths)) ?
-                    Paths?.FirstOrDefault(s => s.Id == id) :
-                    await unitOfWork.PathsRepository.GetByIdAsync(id);
-                unitOfWork.PathsRepository.Delete(Path);
+                var path = await unitOfWork.PathsRepository.GetByIdAsync(id);
+                if (path == null)
+                {
+                    return NotFound();
+                }
+
+                unitOfWork.PathsRepository.Delete(path);
                 await unitOfWork.SaveChangesAsync();
                 memoryCache.Remove(CacheKey); // Clear cache
-                ViewBag.Message = "تم حذف البيانات بنجاح";
+
+                ViewBag.Message = "Data deleted successfully";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 var errorViewModel = new ErrorViewModel
                 {
-                    Message = "خطا في حذف البيانات",
+                    Message = "Error deleting data",
                     StackTrace = ex.StackTrace
                 };
                 return View("~/Views/Shared/Error.cshtml", errorViewModel);

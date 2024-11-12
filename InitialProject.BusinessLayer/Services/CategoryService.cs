@@ -91,6 +91,30 @@ namespace TechYardHub.BusinessLayer.Services
             }
         }
 
+        public async Task<CategoryDto> GetCategoryByNameAsync(string name)
+        {
+            try
+            {
+                // Fetch category with image included
+                var category = await _unitOfWork.CategoriesRepository.FindAsync(a=>a.name==name,
+                    include: query => query.Include(c => c.image));
+
+                if (category == null)
+                {
+                    // Return null or throw an exception if the category is not found
+                    throw new KeyNotFoundException($"Category with name {name} not found.");
+                }
+
+                // Map category to CategoryDto including image URL
+                return await MapCategoryToDtoAsync(category);
+            }
+            catch (Exception ex)
+            {
+                // Log the error and rethrow or handle it gracefully
+                throw new Exception($"An error occurred while fetching category with name {name}.", ex);
+            }
+        }
+
         public async Task<CategoryDto> CreateCategoryAsync(CategoryDto categoryDto)
         {
             try

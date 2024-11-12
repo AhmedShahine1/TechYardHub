@@ -31,12 +31,48 @@ namespace TechYardHub.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CategoryDto categoryDto)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                ModelState.AddModelError(string.Empty, "Please correct the errors and try again.");
+                return View(categoryDto);
+            }
+
+            try
+            {
+                // Check if the category name is unique (optional)
+                var existingCategory = await _categoryService.GetCategoryByNameAsync(categoryDto.Name);
+                if (existingCategory != null)
+                {
+                    ModelState.AddModelError("Name", "A category with this name already exists.");
+                    return View(categoryDto);
+                }
+
+                // Validate image file if provided
+                if (categoryDto.Image != null)
+                {
+                    if (!categoryDto.Image.ContentType.StartsWith("image/"))
+                    {
+                        ModelState.AddModelError("Image", "Please upload a valid image file.");
+                        return View(categoryDto);
+                    }
+                    if (categoryDto.Image.Length > 2 * 1024 * 1024) // 2MB max size
+                    {
+                        ModelState.AddModelError("Image", "Image size cannot exceed 2MB.");
+                        return View(categoryDto);
+                    }
+                }
+
                 await _categoryService.CreateCategoryAsync(categoryDto);
+                TempData["SuccessMessage"] = "Category created successfully!";
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoryDto);
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while creating the category.");
+                // Log the exception for further analysis
+                Console.WriteLine(ex); // Replace with your logging service
+                return View(categoryDto);
+            }
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -52,14 +88,51 @@ namespace TechYardHub.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(string id, CategoryDto categoryDto)
         {
             if (id != categoryDto.Id)
-                return BadRequest();
-
-            if (ModelState.IsValid)
             {
+                return BadRequest("Category ID mismatch.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Please correct the errors and try again.");
+                return View(categoryDto);
+            }
+
+            try
+            {
+                // Check if another category with the same name already exists (optional)
+                var existingCategory = await _categoryService.GetCategoryByNameAsync(categoryDto.Name);
+                if (existingCategory != null && existingCategory.Id != id)
+                {
+                    ModelState.AddModelError("Name", "A category with this name already exists.");
+                    return View(categoryDto);
+                }
+
+                // Validate image file if provided
+                if (categoryDto.Image != null)
+                {
+                    if (!categoryDto.Image.ContentType.StartsWith("image/"))
+                    {
+                        ModelState.AddModelError("Image", "Please upload a valid image file.");
+                        return View(categoryDto);
+                    }
+                    if (categoryDto.Image.Length > 2 * 1024 * 1024) // 2MB max size
+                    {
+                        ModelState.AddModelError("Image", "Image size cannot exceed 2MB.");
+                        return View(categoryDto);
+                    }
+                }
+
                 await _categoryService.UpdateCategoryAsync(categoryDto);
+                TempData["SuccessMessage"] = "Category updated successfully!";
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoryDto);
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while updating the category.");
+                Console.WriteLine(ex); // Replace with logging service
+                return View(categoryDto);
+            }
         }
 
         [HttpPost, ActionName("Delete")]

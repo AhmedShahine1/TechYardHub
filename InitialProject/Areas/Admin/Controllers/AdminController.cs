@@ -38,13 +38,27 @@ namespace TechYardHub.Areas.Admin.Controllers
 
             try
             {
+                // Check for duplicate email or phone number
+                var existingUser = await accountService.FindByEmailAsync(model.Email);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("Email", "An account with this email already exists.");
+                    return View(model);
+                }
+
+                var existingPhoneUser = await accountService.FindByPhoneNumberAsync(model.PhoneNumber);
+                if (existingPhoneUser != null)
+                {
+                    ModelState.AddModelError("PhoneNumber", "An account with this phone number already exists.");
+                    return View(model);
+                }
+
                 var result = await accountService.RegisterAdmin(model);
 
                 if (result.Succeeded)
                 {
-                    // Optionally, redirect to a success page or display a success message
                     TempData["SuccessMessage"] = "Registration successful!";
-                    return RedirectToAction("Index", "Home"); // Adjust the redirection as needed
+                    return RedirectToAction("Index", "Home"); // Adjust redirection as needed
                 }
 
                 // If registration failed, display the errors
@@ -57,36 +71,11 @@ namespace TechYardHub.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                ModelState.AddModelError(string.Empty, "An error occurred while processing your request. Please try again later.");
+                // Log the exception details for further analysis
+                Console.WriteLine(ex); // Replace with a logging service
                 return View(model);
             }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Edit(string id)
-        {
-            var admin = await accountService.GetUserById(id);
-            if (admin == null)
-            {
-                return NotFound();
-            }
-            var model = new RegisterAdmin
-            {
-                FullName = admin.FullName,
-                Email = admin.Email
-            };
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(string id)
-        {
-            var result = await accountService.Suspend(id);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index", "Home", new { area = "" });
-            }
-            return RedirectToAction("Index", "Admin");
         }
     }
 }

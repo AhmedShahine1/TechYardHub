@@ -76,6 +76,13 @@ namespace TechYardHub.Areas.Support.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    // Check if Role Name or RoleAr (Role Name Arabic) already exists
+                    if (await roleManager.RoleExistsAsync(roleModel.RoleName))
+                    {
+                        ModelState.AddModelError("RoleName", "Role Name already exists.");
+                        return View(roleModel);
+                    }
+
                     var role = mapper.Map<ApplicationRole>(roleModel);
                     var result = await roleManager.CreateAsync(role);
                     if (result.Succeeded)
@@ -94,7 +101,7 @@ namespace TechYardHub.Areas.Support.Controllers
             {
                 var errorViewModel = new ErrorViewModel
                 {
-                    Message = "خطا في حقظ البيانات",
+                    Message = "Error saving data",
                     StackTrace = ex.StackTrace
                 };
                 return View("~/Views/Shared/Error.cshtml", errorViewModel);
@@ -122,24 +129,38 @@ namespace TechYardHub.Areas.Support.Controllers
                 return View("~/Views/Shared/Error.cshtml", errorViewModel);
             }
         }
+
         // POST: RoleController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(RoleDTO roleDTO,string id)
+        public async Task<IActionResult> Edit(RoleDTO roleDTO, string id)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var role = await roleManager.FindByIdAsync(id);
-                    role.Name = roleDTO.RoleName;
-                    role.Description = roleDTO.RoleDescription;
-                    role.ArName = roleDTO.RoleAr;
-                    var result = await roleManager.UpdateAsync(role);
+                    var existingRole = await roleManager.FindByIdAsync(id);
+                    if (existingRole == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Check for duplicate role name
+                    if (await roleManager.RoleExistsAsync(roleDTO.RoleName) && existingRole.Name != roleDTO.RoleName)
+                    {
+                        ModelState.AddModelError("RoleName", "Role Name already exists.");
+                        return View(roleDTO);
+                    }
+
+                    existingRole.Name = roleDTO.RoleName;
+                    existingRole.Description = roleDTO.RoleDescription;
+                    existingRole.ArName = roleDTO.RoleAr;
+
+                    var result = await roleManager.UpdateAsync(existingRole);
                     if (result.Succeeded)
                     {
                         memoryCache.Remove(CacheKey); // Clear cache
-                        ViewBag.Message = "تم تعديل البيانات بنجاح";
+                        ViewBag.Message = "Data updated successfully";
                         return RedirectToAction(nameof(Index));
                     }
                     else
@@ -153,7 +174,7 @@ namespace TechYardHub.Areas.Support.Controllers
             {
                 var errorViewModel = new ErrorViewModel
                 {
-                    Message = "خطا في تعديل البيانات",
+                    Message = "Error updating data",
                     StackTrace = ex.StackTrace
                 };
                 return View("~/Views/Shared/Error.cshtml", errorViewModel);
@@ -177,7 +198,7 @@ namespace TechYardHub.Areas.Support.Controllers
                 if (result.Succeeded)
                 {
                     memoryCache.Remove(CacheKey); // Clear cache
-                    ViewBag.Message = "تم حذف البيانات بنجاح";
+                    ViewBag.Message = "Data deleted successfully";
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -185,13 +206,13 @@ namespace TechYardHub.Areas.Support.Controllers
                     ModelState.AddModelError(string.Empty, string.Join("; ", result.Errors.Select(e => e.Description)));
                 }
 
-                return View(nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 var errorViewModel = new ErrorViewModel
                 {
-                    Message = "خطا في حذف البيانات",
+                    Message = "Error deleting data",
                     StackTrace = ex.StackTrace
                 };
                 return View("~/Views/Shared/Error.cshtml", errorViewModel);

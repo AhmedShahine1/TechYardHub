@@ -6,7 +6,7 @@
     <a asp-action="Create" class="btn btn-primary">Create Category</a>
 </p>
 
-<table class="table table-bordered">
+<table id="cqtegoryTable" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Name</th>
@@ -58,7 +58,19 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
     <script>
+        $(document).ready(function () {
+            $('#cqtegoryTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthChange": true
+            });
+        });
+
         let deleteCategoryId = '';
 
         function openDeleteModal(categoryId) {

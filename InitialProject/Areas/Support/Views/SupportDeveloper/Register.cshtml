@@ -1,9 +1,11 @@
-﻿@model RegisterAdmin
+﻿@model RegisterSupportDeveloper
+
 @{
     Layout = "_RegisterLayout";
 }
-<h2> انشاء حساب</h2>
-<form asp-action="Register" asp-controller="SupportDeveloper" method="post" enctype="multipart/form-data">
+
+<h2>Register Account</h2>
+<form asp-action="Register" asp-controller="SupportDeveloper" method="post" enctype="multipart/form-data" id="registerForm">
     @Html.AntiForgeryToken()
 
     <span class="text-danger">
@@ -46,10 +48,9 @@
         <span asp-validation-for="ImageProfile" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-secondary custom-button">إنشاء الحساب</button>
+    <button type="submit" class="btn btn-secondary custom-button">Register</button>
 </form>
-<div role="group" aria-label="Basic example" class="button-group mt-3">
-    <button type="button" class="btn btn-secondary custom-button" onclick="location.href='@Url.Action("Login", "Auth")'">
-        تسجيل دخول
-    </button>
-</div>
+
+@section Scripts {
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+}

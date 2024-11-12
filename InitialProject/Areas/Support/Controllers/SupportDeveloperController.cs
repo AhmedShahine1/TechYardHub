@@ -4,8 +4,6 @@ using TechYardHub.Core.DTO.AuthViewModel.RegisterModel;
 using TechYardHub.Core.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using TechYardHub.Core.DTO;
 
 namespace TechYardHub.Areas.Support.Controllers
 {
@@ -21,81 +19,61 @@ namespace TechYardHub.Areas.Support.Controllers
             mapper = _mapper;
         }
         [HttpGet]
-        public async Task<IActionResult> Register()
+        public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterSupportDeveloper model)
         {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Please correct the errors and try again.");
+                return View(model);
+            }
+
             try
             {
-                if (ModelState.IsValid)
+                // Check for duplicate email or phone number
+                var existingUser = await accountService.FindByEmailAsync(model.Email);
+                if (existingUser != null)
                 {
-                    var result = await accountService.RegisterSupportDeveloper(model);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index", "Home", new { area = "" });
-                    }
+                    ModelState.AddModelError("Email", "An account with this email already exists.");
                     return View(model);
                 }
+
+                var existingPhoneUser = await accountService.FindByPhoneNumberAsync(model.PhoneNumber);
+                if (existingPhoneUser != null)
+                {
+                    ModelState.AddModelError("PhoneNumber", "An account with this phone number already exists.");
+                    return View(model);
+                }
+
+                var result = await accountService.RegisterSupportDeveloper(model);
+
+                if (result.Succeeded)
+                {
+                    TempData["SuccessMessage"] = "Registration successful!";
+                    return RedirectToAction("Index", "Home"); // Adjust redirection as needed
+                }
+
+                // If registration failed, display the errors
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
                 return View(model);
             }
             catch (Exception ex)
             {
-                var errorViewModel = new ErrorViewModel
-                {
-                    Message = "خطا في تسجيل البيانات",
-                    StackTrace = ex.InnerException.Message
-                };
-                return View("~/Views/Shared/Error.cshtml", errorViewModel);
+                ModelState.AddModelError(string.Empty, "An error occurred while processing your request. Please try again later.");
+                // Log the exception details for further analysis
+                Console.WriteLine(ex); // Replace with a logging service
+                return View(model);
             }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Edit(string id)
-        {
-            var admin = await accountService.GetUserById(id);
-            if (admin == null)
-            {
-                return NotFound();
-            }
-            var model = new RegisterSupportDeveloper
-            {
-                FullName = admin.FullName,
-                Email = admin.Email,
-            };
-            return View(model);
-        }
-
-        //[HttpPost]
-        //public async Task<IActionResult> Edit(string id, RegisterSupportDeveloper model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await accountService.UpdateSupportDeveloper(id, model);
-        //        if (result.Succeeded)
-        //        {
-        //            return RedirectToAction("Index", "Home", new { area = "" });
-        //        }
-        //        foreach (var error in result.Errors)
-        //        {
-        //            ModelState.AddModelError(string.Empty, error.Description);
-        //        }
-        //    }
-        //    return View(model);
-        //}
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(string id)
-        {
-            var result = await accountService.Suspend(id);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index", "Home", new { area = "" });
-            }
-            return RedirectToAction("Index", "Admin");
         }
     }
 }

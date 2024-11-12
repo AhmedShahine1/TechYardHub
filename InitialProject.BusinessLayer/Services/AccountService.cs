@@ -56,6 +56,21 @@ public class AccountService : IAccountService
             .FirstOrDefaultAsync(x => x.Id == id && x.Status);
         return user;
     }
+    public async Task<ApplicationUser> FindByEmailAsync(string email)
+    {
+        var user = await _userManager.Users
+            .Include(u => u.Profile)
+            .FirstOrDefaultAsync(x => x.Email == email && x.Status);
+        return user;
+    }
+    public async Task<ApplicationUser> FindByPhoneNumberAsync(string phoneNumber)
+    {
+        var user = await _userManager.Users
+            .Include(u => u.Profile)
+            .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber && x.Status);
+        return user;
+    }
+
     //------------------------------------------------------------------------------------------------------------
     // Check if email or phone number already exists before creating or updating the user
     private async Task<bool> IsEmailOrPhoneExistAsync(string email, string phoneNumber, string userId = null)

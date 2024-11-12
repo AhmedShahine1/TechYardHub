@@ -40,18 +40,47 @@ namespace TechYardHub.Areas.Admin.Controllers
             ViewBag.Categories = await _productService.GetAllCategoriesAsync();
             return View(new ProductDto());
         }
+
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductDto productDto, List<IFormFile> images)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                productDto.Images = images;
-                var createdProduct = await _productService.CreateProductAsync(productDto);
+                ModelState.AddModelError(string.Empty, "Please correct the errors and try again.");
+                ViewBag.Categories = await _productService.GetAllCategoriesAsync();
+                return View(productDto);
+            }
+
+            // Validate images (optional: check type and size)
+            foreach (var image in images)
+            {
+                if (!image.ContentType.StartsWith("image/"))
+                {
+                    ModelState.AddModelError("Images", "Only image files are allowed.");
+                    return View(productDto);
+                }
+                if (image.Length > 2 * 1024 * 1024) // 2MB size limit
+                {
+                    ModelState.AddModelError("Images", "Each image file must be less than 2MB.");
+                    return View(productDto);
+                }
+            }
+
+            productDto.Images = images;
+            try
+            {
+                await _productService.CreateProductAsync(productDto);
+                TempData["SuccessMessage"] = "Product created successfully!";
                 return RedirectToAction(nameof(Index));
             }
-            return View(productDto);
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while creating the product.");
+                Console.WriteLine(ex); // Logging for debugging
+                return View(productDto);
+            }
         }
 
         // GET: Products/Edit/{id}
@@ -73,16 +102,44 @@ namespace TechYardHub.Areas.Admin.Controllers
         {
             if (id != productDto.Id)
             {
-                return BadRequest();
+                return BadRequest("Product ID mismatch.");
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                productDto.Images = images;
+                ModelState.AddModelError(string.Empty, "Please correct the errors and try again.");
+                ViewBag.Categories = await _productService.GetAllCategoriesAsync();
+                return View(productDto);
+            }
+
+            // Validate images
+            foreach (var image in images)
+            {
+                if (!image.ContentType.StartsWith("image/"))
+                {
+                    ModelState.AddModelError("Images", "Only image files are allowed.");
+                    return View(productDto);
+                }
+                if (image.Length > 2 * 1024 * 1024) // 2MB size limit
+                {
+                    ModelState.AddModelError("Images", "Each image file must be less than 2MB.");
+                    return View(productDto);
+                }
+            }
+
+            productDto.Images = images;
+            try
+            {
                 await _productService.UpdateProductAsync(productDto);
+                TempData["SuccessMessage"] = "Product updated successfully!";
                 return RedirectToAction(nameof(Index));
             }
-            return View(productDto);
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while updating the product.");
+                Console.WriteLine(ex); // Logging for debugging
+                return View(productDto);
+            }
         }
 
         // POST: Products/Delete/{id}
