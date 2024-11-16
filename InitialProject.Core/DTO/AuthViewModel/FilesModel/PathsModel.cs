@@ -14,5 +14,7 @@ namespace TechYardHub.Core.DTO.AuthViewModel.FilesModel
         public string Name { get; set; }
         [Required(ErrorMessage = "Should Enter Description Path"), DisplayName("Description Path"), StringLength(250)]
         public string Description { get; set; }
+
+        public bool Status { get; set; } = true;
     }
 }

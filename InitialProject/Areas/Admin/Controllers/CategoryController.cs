@@ -135,6 +135,31 @@ namespace TechYardHub.Areas.Admin.Controllers
             }
         }
 
+        [HttpPost, ActionName("UpdateStatus")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStatusCategoryAsync(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return BadRequest("Invalid category ID.");
+            }
+
+            try
+            {
+                var updatedCategory = await _categoryService.UpdateStatusCategoryAsync(id);
+                if (updatedCategory == null)
+                {
+                    return NotFound("Category not found.");
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string id)

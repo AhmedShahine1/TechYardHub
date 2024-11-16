@@ -83,6 +83,20 @@ namespace TechYardHub.Areas.Admin.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadExcelFile(IFormFile excelFile)
+        {
+            if (excelFile == null || excelFile.Length == 0)
+            {
+                // Handle case where no file is selected
+                ModelState.AddModelError("", "Please select an Excel file.");
+                return RedirectToAction(nameof(Create));
+            }
+            await _productService.AddProductsFromExcelAsync(excelFile);
+            return RedirectToAction(nameof(Index));
+        }
+
         // GET: Products/Edit/{id}
         public async Task<IActionResult> Edit(string id)
         {
@@ -142,6 +156,30 @@ namespace TechYardHub.Areas.Admin.Controllers
             }
         }
 
+        [HttpPost, ActionName("UpdateStatus")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStatusProductAsync(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return BadRequest("Invalid product ID.");
+            }
+
+            try
+            {
+                var updatedProduct = await _productService.UpdateStatusProductAsync(id);
+                if (updatedProduct == null)
+                {
+                    return NotFound("Product not found.");
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
         // POST: Products/Delete/{id}
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

@@ -4,12 +4,8 @@ using System.Diagnostics;
 namespace TechYardHub.Core.Entity.Files
 {
     [DebuggerDisplay("{Name,nq}")]
-    public class Images
+    public class Images : BaseEntity
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-
-        public string Name { get; set; }
-
         [ForeignKey("path")]
         public string pathId { get; set; }
 

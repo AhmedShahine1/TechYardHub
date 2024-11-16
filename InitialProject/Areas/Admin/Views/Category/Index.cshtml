@@ -12,6 +12,7 @@
             <th>Name</th>
             <th>Description</th>
             <th>Image</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -23,6 +24,20 @@
                 <td>@category.Description</td>
                 <td>
                     <img src="@category.ImageUrl" alt="@category.Name" width="50" height="50" />
+                </td>
+                <td>
+                    <!-- Change Status Button with Modal Trigger -->
+                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#statusModal"
+                            onclick="openStatusModal('@category.Id', '@category.Name', @category.Status.ToString().ToLower())">
+                        @if (category.Status)
+                        {
+                            <span>Deactivate</span>
+                        }
+                        else
+                        {
+                            <span>Activate</span>
+                        }
+                    </button>
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@category.Id" class="btn btn-warning">Edit</a>
@@ -57,6 +72,30 @@
     </div>
 </div>
 
+<!-- Status Confirmation Modal -->
+<div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title" id="statusModalLabel">Change category Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to <span id="status-action"></span> the category "<span id="status-category-name"></span>"?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                <form id="statusForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-info">Confirm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
@@ -81,6 +120,31 @@
             // Redirect to your delete action with the category ID
             window.location.href = `/Admin/Category/Delete/${deleteCategoryId}`;
         });
+        function updateCategoryStatus(categoryId) {
+            // Redirect to the status update action with the category ID
+            window.location.href = `/Admin/Category/UpdateStatus/${categoryId}`;
+        }
     </script>
+    <script>
+        let statusCategoryId = '';
+        let statusCategoryName = '';
+        let statusAction = '';
 
+        // Open the status modal and set the product details
+        function openStatusModal(CategoryId, CategoryName, currentStatus) {
+            console.log(CategoryId);
+            console.log(CategoryName);
+            console.log(currentStatus);
+            statusCategoryId = CategoryId;
+            statusCategoryName = CategoryName;
+            statusAction = currentStatus ? 'deactivate' : 'activate';
+            // Update modal content
+            document.getElementById('status-category-name').textContent = statusCategoryName;
+            document.getElementById('status-action').textContent = statusAction;
+
+            // Update the form action with the product ID for status update
+            const statusForm = document.getElementById('statusForm');
+            statusForm.action = '/Admin/Category/UpdateStatus/' + statusCategoryId;
+        }
+    </script>
 }

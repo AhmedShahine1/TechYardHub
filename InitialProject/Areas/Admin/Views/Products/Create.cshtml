@@ -2,6 +2,13 @@
 @{
     ViewBag.Title = "Create Product";
 }
+<form asp-action="UploadExcelFile" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="excelFile">Upload Excel File</label>
+        <input type="file" id="excelFile" name="excelFile" class="form-control-file" />
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>
 
 <form asp-action="Create" enctype="multipart/form-data">
     <!-- Name Field -->

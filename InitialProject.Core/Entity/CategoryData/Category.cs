@@ -10,10 +10,8 @@ using TechYardHub.Core.Entity.ProductData;
 namespace TechYardHub.Core.Entity.CategoryData
 {
     [DebuggerDisplay("{name,nq}")]
-    public class Category
+    public class Category : BaseEntity
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string name { get; set; }
         public string description { get; set; }
         public Images image { get; set; }
         public ICollection<Product> Products { get; set; } = new List<Product>();

@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using TechYardHub.Core.Entity.CategoryData;
 using TechYardHub.Core.Entity.Files;
 
 namespace TechYardHub.Core.Entity.ProductData
 {
-    public class Product
+    [DebuggerDisplay("{Name,nq}")]
+    public class Product : BaseEntity
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-
+        public bool Popular { get; set; } = false;
         // Foreign key to the Category
         public string CategoryId { get; set; }
         [ForeignKey(nameof(CategoryId))]

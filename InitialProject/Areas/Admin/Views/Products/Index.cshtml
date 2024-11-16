@@ -11,6 +11,7 @@
             <th>Description</th>
             <th>Price</th>
             <th>Details</th>
+            <th>Status</th>
             <th>Edit</th>
             <th>Delete</th>
         </tr>
@@ -25,6 +26,20 @@
                 <td>
                     <!-- Details Button -->
                     <a href="@Url.Action("Details", "Products", new { id = product.Id })" class="btn btn-info btn-sm">Details</a>
+                </td>
+                <td>
+                    <!-- Change Status Button with Modal Trigger -->
+                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#statusModal"
+                            onclick="openStatusModal('@product.Id', '@product.Name', @product.Status.ToString().ToLower())">
+                        @if (product.Status)
+                        {
+                            <span>Deactivate</span>
+                        }
+                        else
+                        {
+                            <span>Activate</span>
+                        }
+                    </button>
                 </td>
                 <td>
                     <!-- Edit Button -->
@@ -63,6 +78,30 @@
     </div>
 </div>
 
+<!-- Status Confirmation Modal -->
+<div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title" id="statusModalLabel">Change Product Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to <span id="status-action"></span> the product "<span id="status-product-name"></span>"?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                <form id="statusForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-info">Confirm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
@@ -93,4 +132,24 @@
             deleteForm.action = '/Admin/Products/Delete/' + deleteProductId;
         }
     </script>
+    <script>
+        let statusProductId = '';
+        let statusProductName = '';
+        let statusAction = '';
+
+        // Open the status modal and set the product details
+        function openStatusModal(productId, productName, currentStatus) {
+            statusProductId = productId;
+            statusProductName = productName;
+            statusAction = currentStatus ? 'deactivate' : 'activate';
+            // Update modal content
+            document.getElementById('status-product-name').textContent = statusProductName;
+            document.getElementById('status-action').textContent = statusAction;
+
+            // Update the form action with the product ID for status update
+            const statusForm = document.getElementById('statusForm');
+            statusForm.action = '/Admin/Products/UpdateStatus/' + statusProductId;
+        }
+    </script>
+
 }

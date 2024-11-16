@@ -14,6 +14,7 @@ namespace TechYardHub.BusinessLayer.Interfaces
         Task<CategoryDto> GetCategoryByNameAsync(string name);
         Task<CategoryDto> CreateCategoryAsync(CategoryDto categoryDto);
         Task<CategoryDto> UpdateCategoryAsync(CategoryDto categoryDto);
+        Task<CategoryDto> UpdateStatusCategoryAsync(string id);
         Task<bool> DeleteCategoryAsync(string id);
     }
 }

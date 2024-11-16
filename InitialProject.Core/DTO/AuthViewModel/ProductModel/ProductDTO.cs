@@ -49,5 +49,7 @@ namespace TechYardHub.Core.DTO.AuthViewModel.ProductModel
         public string? Connectivity { get; set; }
         public string? KeyboardType { get; set; }
         public string? TouchBar { get; set; }
+        public bool Status { get; set; } = true;
+        public bool Popular { get; set; }
     }
 }

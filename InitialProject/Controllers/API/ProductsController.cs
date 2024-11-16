@@ -27,7 +27,7 @@ namespace TechYardHub.Controllers.API
                     status = true,
                     ErrorCode = 200,
                     ErrorMessage = null,
-                    Data = products
+                    Data = products.Where(a => a.Status)
                 };
                 return Ok(response);
             }

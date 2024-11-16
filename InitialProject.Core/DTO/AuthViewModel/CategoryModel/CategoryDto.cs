@@ -20,5 +20,7 @@ namespace TechYardHub.Core.DTO.AuthViewModel.CategoryModel
 
         [Display(Name = "Category Image")]
         public IFormFile? Image { get; set; }
+
+        public bool Status { get; set; } = true;
     }
 }

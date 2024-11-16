@@ -22,7 +22,7 @@ namespace TechYardHub.Controllers.API
                 var categories = await _categoryService.GetAllCategoriesAsync();
                 return Ok(new BaseResponse
                 {
-                    Data = categories,
+                    Data = categories.Where(a=>a.Status),
                     ErrorCode = 200,
                     ErrorMessage = null,
                     status = true

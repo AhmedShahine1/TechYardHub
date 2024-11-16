@@ -4,7 +4,9 @@ using TechYardHub.Core.DTO.AuthViewModel.CategoryModel;
 using TechYardHub.Core.Entity.Files;
 using TechYardHub.RepositoryLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using TechYardHub.Core.Entity.CategoryData;
+using TechYardHub.Core.Helpers;
 
 namespace TechYardHub.BusinessLayer.Services
 {
@@ -13,13 +15,15 @@ namespace TechYardHub.BusinessLayer.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileHandling _fileHandling;
         private readonly IMapper _mapper;
+        private readonly IMemoryCache _memoryCache;
         private readonly Paths Categorypath;
 
-        public CategoryService(IUnitOfWork unitOfWork, IFileHandling fileHandling, IMapper mapper)
+        public CategoryService(IUnitOfWork unitOfWork, IFileHandling fileHandling, IMapper mapper, IMemoryCache memoryCache)
         {
             _unitOfWork = unitOfWork;
             _fileHandling = fileHandling;
             _mapper = mapper;
+            _memoryCache = memoryCache;
             Categorypath = unitOfWork.PathsRepository.Find(a => a.Name == "CategoryIcon");
         }
 
@@ -38,81 +42,42 @@ namespace TechYardHub.BusinessLayer.Services
 
         public async Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync()
         {
-            try
+            // Use memory cache to fetch categories
+            if (!_memoryCache.TryGetValue(CacheMemory.Category.ToString(), out List<CategoryDto> cachedCategories))
             {
-                // Fetch categories with image included
+                // If not found in cache, fetch from the database
                 var categories = await _unitOfWork.CategoriesRepository.GetAllAsync(
                     include: query => query.Include(c => c.image));
 
                 if (categories == null || !categories.Any())
                 {
-                    // Return an empty list or handle as needed
                     return new List<CategoryDto>();
                 }
 
-                // Map categories to CategoryDto including image URLs
-                var categoryDtos = new List<CategoryDto>();
+                cachedCategories = new List<CategoryDto>();
                 foreach (var category in categories)
                 {
                     var categoryDto = await MapCategoryToDtoAsync(category);
-                    categoryDtos.Add(categoryDto);
+                    cachedCategories.Add(categoryDto);
                 }
 
-                return categoryDtos;
+                // Store categories in memory cache
+                _memoryCache.Set(CacheMemory.Category.ToString(), cachedCategories, TimeSpan.FromHours(1));
             }
-            catch (Exception ex)
-            {
-                // Log the error and rethrow or handle it gracefully
-                throw new Exception("An error occurred while fetching categories.", ex);
-            }
+
+            return cachedCategories;
         }
 
         public async Task<CategoryDto> GetCategoryByIdAsync(string id)
         {
-            try
-            {
-                // Fetch category with image included
-                var category = await _unitOfWork.CategoriesRepository.FindAsync(a=>a.Id==id,
-                    include: query => query.Include(c => c.image));
-
-                if (category == null)
-                {
-                    // Return null or throw an exception if the category is not found
-                    throw new KeyNotFoundException($"Category with ID {id} not found.");
-                }
-
-                // Map category to CategoryDto including image URL
-                return await MapCategoryToDtoAsync(category);
-            }
-            catch (Exception ex)
-            {
-                // Log the error and rethrow or handle it gracefully
-                throw new Exception($"An error occurred while fetching category with ID {id}.", ex);
-            }
+            var categories = await GetAllCategoriesAsync();
+            return categories.FirstOrDefault(c => c.Id == id);
         }
 
         public async Task<CategoryDto> GetCategoryByNameAsync(string name)
         {
-            try
-            {
-                // Fetch category with image included
-                var category = await _unitOfWork.CategoriesRepository.FindAsync(a=>a.name==name,
-                    include: query => query.Include(c => c.image));
-
-                if (category == null)
-                {
-                    // Return null or throw an exception if the category is not found
-                    throw new KeyNotFoundException($"Category with name {name} not found.");
-                }
-
-                // Map category to CategoryDto including image URL
-                return await MapCategoryToDtoAsync(category);
-            }
-            catch (Exception ex)
-            {
-                // Log the error and rethrow or handle it gracefully
-                throw new Exception($"An error occurred while fetching category with name {name}.", ex);
-            }
+            var categories = await GetAllCategoriesAsync();
+            return categories.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public async Task<CategoryDto> CreateCategoryAsync(CategoryDto categoryDto)
@@ -121,7 +86,7 @@ namespace TechYardHub.BusinessLayer.Services
             {
                 var category = _mapper.Map<Category>(categoryDto);
                 string imageid;
-                // Upload image if provided
+
                 if (categoryDto.Image != null)
                 {
                     imageid = await _fileHandling.UploadFile(categoryDto.Image, Categorypath);
@@ -130,11 +95,14 @@ namespace TechYardHub.BusinessLayer.Services
 
                 await _unitOfWork.CategoriesRepository.AddAsync(category);
                 await _unitOfWork.SaveChangesAsync();
+
+                // Clear cache after creating a new category
+                _memoryCache.Remove(CacheMemory.Category.ToString());
+
                 return _mapper.Map<CategoryDto>(category);
             }
             catch (Exception ex)
             {
-                // Log the error and rethrow or handle it gracefully
                 throw new Exception("An error occurred while creating the category.", ex);
             }
         }
@@ -146,13 +114,11 @@ namespace TechYardHub.BusinessLayer.Services
                 var category = await _unitOfWork.CategoriesRepository.GetByIdAsync(categoryDto.Id);
                 if (category == null)
                 {
-                    // Handle case where category does not exist
                     throw new KeyNotFoundException($"Category with ID {categoryDto.Id} not found.");
                 }
 
                 _mapper.Map(categoryDto, category);
 
-                // Optionally, update image if provided
                 if (categoryDto.Image != null)
                 {
                     await _fileHandling.UploadFile(categoryDto.Image, Categorypath);
@@ -160,11 +126,39 @@ namespace TechYardHub.BusinessLayer.Services
 
                 _unitOfWork.CategoriesRepository.Update(category);
                 await _unitOfWork.SaveChangesAsync();
+
+                // Clear cache after updating a category
+                _memoryCache.Remove(CacheMemory.Category.ToString());
+
                 return _mapper.Map<CategoryDto>(category);
             }
             catch (Exception ex)
             {
-                // Log the error and rethrow or handle it gracefully
+                throw new Exception("An error occurred while updating the category.", ex);
+            }
+        }
+
+        public async Task<CategoryDto> UpdateStatusCategoryAsync(string id)
+        {
+            try
+            {
+                var category = await _unitOfWork.CategoriesRepository.GetByIdAsync(id);
+                if (category == null)
+                {
+                    throw new KeyNotFoundException($"Category with ID {id} not found.");
+                }
+
+                category.Status = !category.Status;
+                _unitOfWork.CategoriesRepository.Update(category);
+                await _unitOfWork.SaveChangesAsync();
+
+                // Clear cache after updating category status
+                _memoryCache.Remove(CacheMemory.Category.ToString());
+
+                return _mapper.Map<CategoryDto>(category);
+            }
+            catch (Exception ex)
+            {
                 throw new Exception("An error occurred while updating the category.", ex);
             }
         }
@@ -176,11 +170,9 @@ namespace TechYardHub.BusinessLayer.Services
                 var category = await _unitOfWork.CategoriesRepository.GetByIdAsync(id);
                 if (category == null)
                 {
-                    // Handle case where category does not exist
                     throw new KeyNotFoundException($"Category with ID {id} not found.");
                 }
 
-                // Optionally delete the image file
                 if (category.image != null)
                 {
                     await _fileHandling.DeleteFile(category.image.Id);
@@ -188,11 +180,14 @@ namespace TechYardHub.BusinessLayer.Services
 
                 _unitOfWork.CategoriesRepository.Delete(category);
                 await _unitOfWork.SaveChangesAsync();
+
+                // Clear cache after deleting a category
+                _memoryCache.Remove(CacheMemory.Category.ToString());
+
                 return true;
             }
             catch (Exception ex)
             {
-                // Log the error and rethrow or handle it gracefully
                 throw new Exception("An error occurred while deleting the category.", ex);
             }
         }
