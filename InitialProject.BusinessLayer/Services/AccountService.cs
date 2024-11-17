@@ -56,6 +56,7 @@ public class AccountService : IAccountService
             .FirstOrDefaultAsync(x => x.Id == id && x.Status);
         return user;
     }
+
     public async Task<ApplicationUser> FindByEmailAsync(string email)
     {
         var user = await _userManager.Users
@@ -63,6 +64,7 @@ public class AccountService : IAccountService
             .FirstOrDefaultAsync(x => x.Email == email && x.Status);
         return user;
     }
+
     public async Task<ApplicationUser> FindByPhoneNumberAsync(string phoneNumber)
     {
         var user = await _userManager.Users

@@ -241,7 +241,7 @@ namespace TechYardHub.BusinessLayer.Services
             return await _categoryService.GetAllCategoriesAsync();
         }
 
-        //--------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------------------------
         public async Task AddProductsFromExcelAsync(IFormFile excelFile)
         {
             if (excelFile == null || excelFile.Length <= 0)
@@ -338,6 +338,79 @@ namespace TechYardHub.BusinessLayer.Services
         {
             var value = GetValue(worksheet, row, columnMapping, columnName);
             return string.IsNullOrEmpty(value) ? new List<string>() : value.Split(',').Select(s => s.Trim()).ToList();
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------------------
+        public async Task<IEnumerable<ProductDto>> GetLaptopProductsAsync()
+        {
+            try
+            {
+                // Check if the products are cached
+                if (!_memoryCache.TryGetValue(CacheMemory.Product, out IEnumerable<ProductDto> cachedProducts))
+                {
+                    // Fetch all products if not cached
+                    var products = await GetAllProductsAsync(); // Get all products using your existing method
+                    cachedProducts = products.ToList(); // Cache the products
+                    _memoryCache.Set(CacheMemory.Product, cachedProducts, TimeSpan.FromMinutes(30));
+                }
+
+                // Filter products by laptop-related categories
+                var laptopProducts = cachedProducts.Where(p => new[] { "MacBook", "Mac mini", "Mac Pro", "Mac Studio" }.Contains(p.Category.Name) && p.Category.Status && p.Status);
+
+                return laptopProducts;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while fetching laptop products.", ex);
+            }
+        }
+
+        public async Task<IEnumerable<ProductDto>> GetDesktopProductsAsync()
+        {
+            try
+            {
+                // Check if the products are cached
+                if (!_memoryCache.TryGetValue(CacheMemory.Product, out IEnumerable<ProductDto> cachedProducts))
+                {
+                    // Fetch all products if not cached
+                    var products = await GetAllProductsAsync(); // Get all products using your existing method
+                    cachedProducts = products.ToList(); // Cache the products
+                    _memoryCache.Set(CacheMemory.Product, cachedProducts, TimeSpan.FromMinutes(30));
+                }
+
+                // Filter products by desktop-related categories
+                var desktopProducts = cachedProducts.Where(p => new[] { "iMac", "Mac Pro", "Mac Studio" }.Contains(p.Category.Name) && p.Category.Status && p.Status);
+
+                return desktopProducts;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while fetching desktop products.", ex);
+            }
+        }
+
+        public async Task<IEnumerable<ProductDto>> GetAccessoryProductsAsync()
+        {
+            try
+            {
+                // Check if the products are cached
+                if (!_memoryCache.TryGetValue(CacheMemory.Product, out IEnumerable<ProductDto> cachedProducts))
+                {
+                    // Fetch all products if not cached
+                    var products = await GetAllProductsAsync(); // Get all products using your existing method
+                    cachedProducts = products.ToList(); // Cache the products
+                    _memoryCache.Set(CacheMemory.Product, cachedProducts, TimeSpan.FromMinutes(30));
+                }
+
+                // Filter products by accessory-related categories
+                var accessoryProducts = cachedProducts.Where(p => new[] { "Accessories", "SequoiaSpare", "Parts" }.Contains(p.Category.Name) && p.Category.Status && p.Status);
+
+                return accessoryProducts;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while fetching accessory products.", ex);
+            }
         }
     }
 }

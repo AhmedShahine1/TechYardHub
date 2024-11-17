@@ -1,10 +1,11 @@
 ﻿using TechYardHub.BusinessLayer.Interfaces;
 using TechYardHub.Core.DTO;
 using TechYardHub.Core.DTO.AuthViewModel;
-using TechYardHub.Core.DTO.AuthViewModel.RegisterModel;
 using TechYardHub.Core.Entity.ApplicationData;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TechYardHub.Controllers.MVC
 {
@@ -72,6 +73,7 @@ namespace TechYardHub.Controllers.MVC
             return View(model);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
@@ -86,7 +88,7 @@ namespace TechYardHub.Controllers.MVC
                 }
             }
 
-            return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+            return RedirectToAction("Index", "Home");
         }
     }
 }

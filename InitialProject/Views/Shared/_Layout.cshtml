@@ -32,9 +32,22 @@
                         <img src="@HttpContextAccessor.HttpContext.Request.Cookies["UserProfile"]" alt="User Profile" class="img-circle elevation-2" style="width:30px; height:30px;">
                         @HttpContextAccessor.HttpContext.Request.Cookies["UserName"]
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a href="@Url.Action("Profile", "Account")" class="dropdown-item">Profile</a>
-                        <a href="@Url.Action("Logout", "Auth")" class="dropdown-item">Logout</a>
+                    <!-- Dropdown - User Information -->
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                         aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="@Url.Action("Index", "User", new { area = ""})">
+                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Profile
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <!-- Logout Form -->
+                        <form id="logoutForm" action="@Url.Action("Logout", "Auth", new{ area = ""})" method="post" style="display: none;">
+                            @Html.AntiForgeryToken()
+                        </form>
+                        <a class="dropdown-item" href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit();">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Logout
+                        </a>
                     </div>
                 </li>
             </ul>
@@ -67,6 +80,8 @@
                         <!-- Support Developer Role Specific Links -->
                         @if (User.IsInRole("Support Developer"))
                         {
+                            <!-- Main Header -->
+                            <li class="nav-header">Support Developer</li>
                             <!-- Support Developer Section -->
                             <li class="nav-item">
                                 <a href="@Url.Action("Register", "SupportDeveloper", new { area = "Support" })" class="nav-link">
@@ -111,6 +126,8 @@
                         <!-- Admin Role Specific Links -->
                         @if (User.IsInRole("Admin") || User.IsInRole("Support Developer"))
                         {
+                            <!-- Main Header -->
+                            <li class="nav-header">Admin</li>
                             <!-- Admin Section -->
                             <li class="nav-item">
                                 <a href="@Url.Action("RegisterAdmin", "Admin", new { area = "Admin" })" class="nav-link">

@@ -53,7 +53,15 @@
         }
     </tbody>
 </table>
-
+<!-- Buttons for Export -->
+<p>
+    <button class="btn btn-success" onclick="downloadExcel()">
+        <i class="fas fa-file-excel"></i> Download as Excel
+    </button>
+    <button class="btn btn-primary" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> Download as PDF
+    </button>
+</p>
 <!-- AdminLTE Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -105,6 +113,11 @@
 @section Scripts {
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+    <!-- SheetJS (For Excel Export) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+
+    <!-- jsPDF (For PDF Export) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <!-- Initialize DataTable -->
     <script>
@@ -149,6 +162,91 @@
             // Update the form action with the product ID for status update
             const statusForm = document.getElementById('statusForm');
             statusForm.action = '/Admin/Products/UpdateStatus/' + statusProductId;
+        }
+
+        function downloadExcel() {
+            // Get the table element
+            var table = document.getElementById('productTable');
+
+            // Extract the table data (including header) and format it for SheetJS
+            var rows = [];
+
+            // Get the header row
+            var header = [];
+            var th = table.querySelectorAll('thead th');
+            th.forEach(function (item) {
+                header.push(item.innerText); // Get the header text
+            });
+            rows.push(header);
+
+            // Get the table body rows (excluding the header row)
+            var tableRows = table.querySelectorAll('tbody tr');
+            tableRows.forEach(function (row) {
+                var rowData = [];
+                var cells = row.querySelectorAll('td');
+                cells.forEach(function (cell) {
+                    rowData.push(cell.innerText); // Get the data text from each cell
+                });
+                rows.push(rowData);
+            });
+
+            // Create a new workbook and add the extracted rows
+            var wb = XLSX.utils.aoa_to_book(rows, { sheet: "Products" });
+
+            // Generate binary data for the Excel file
+            var wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
+
+            // Convert to binary string for download
+            function s2ab(s) {
+                var buf = new ArrayBuffer(s.length);
+                var view = new Uint8Array(buf);
+                for (var i = 0; i < s.length; i++) {
+                    view[i] = s.charCodeAt(i) & 0xff;
+                }
+                return buf;
+            }
+
+            // Trigger the download
+            var a = document.createElement("a");
+            a.href = URL.createObjectURL(new Blob([s2ab(wbout)], { type: "application/octet-stream" }));
+            a.download = "products.xlsx"; // Set the default file name
+            a.click();
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Get the table element
+            var table = document.getElementById('productTable');
+
+            // Extract the table data (including header) for PDF generation
+            var rows = [];
+            var th = table.querySelectorAll('thead th');
+            var header = [];
+            th.forEach(function (item) {
+                header.push(item.innerText); // Get header text for PDF
+            });
+            rows.push(header);
+
+            var tableRows = table.querySelectorAll('tbody tr');
+            tableRows.forEach(function (row) {
+                var rowData = [];
+                var cells = row.querySelectorAll('td');
+                cells.forEach(function (cell) {
+                    rowData.push(cell.innerText); // Get data text for each row
+                });
+                rows.push(rowData);
+            });
+
+            // Add the rows to the PDF document
+            doc.autoTable({
+                head: [header], // Header row
+                body: rows.slice(1), // Data rows (excluding header)
+            });
+
+            // Save the PDF with a custom filename
+            doc.save('products.pdf');
         }
     </script>
 

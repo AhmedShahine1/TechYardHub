@@ -14,5 +14,9 @@ namespace TechYardHub.BusinessLayer.Interfaces
         Task<bool> DeleteProductAsync(string id);
         Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync();
         Task AddProductsFromExcelAsync(IFormFile excelFile);
+        //--------------------------------------------------------------------------
+        Task<IEnumerable<ProductDto>> GetLaptopProductsAsync();
+        Task<IEnumerable<ProductDto>> GetDesktopProductsAsync();
+        Task<IEnumerable<ProductDto>> GetAccessoryProductsAsync();
     }
 }

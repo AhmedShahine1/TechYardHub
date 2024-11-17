@@ -43,7 +43,7 @@ namespace TechYardHub.BusinessLayer.Services
         public async Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync()
         {
             // Use memory cache to fetch categories
-            if (!_memoryCache.TryGetValue(CacheMemory.Category.ToString(), out List<CategoryDto> cachedCategories))
+            if (!_memoryCache.TryGetValue(CacheMemory.Category, out List<CategoryDto> cachedCategories))
             {
                 // If not found in cache, fetch from the database
                 var categories = await _unitOfWork.CategoriesRepository.GetAllAsync(
@@ -62,7 +62,7 @@ namespace TechYardHub.BusinessLayer.Services
                 }
 
                 // Store categories in memory cache
-                _memoryCache.Set(CacheMemory.Category.ToString(), cachedCategories, TimeSpan.FromHours(1));
+                _memoryCache.Set(CacheMemory.Category, cachedCategories, TimeSpan.FromHours(1));
             }
 
             return cachedCategories;
@@ -97,7 +97,7 @@ namespace TechYardHub.BusinessLayer.Services
                 await _unitOfWork.SaveChangesAsync();
 
                 // Clear cache after creating a new category
-                _memoryCache.Remove(CacheMemory.Category.ToString());
+                _memoryCache.Remove(CacheMemory.Category);
 
                 return _mapper.Map<CategoryDto>(category);
             }
@@ -128,7 +128,7 @@ namespace TechYardHub.BusinessLayer.Services
                 await _unitOfWork.SaveChangesAsync();
 
                 // Clear cache after updating a category
-                _memoryCache.Remove(CacheMemory.Category.ToString());
+                _memoryCache.Remove(CacheMemory.Category);
 
                 return _mapper.Map<CategoryDto>(category);
             }
@@ -153,7 +153,7 @@ namespace TechYardHub.BusinessLayer.Services
                 await _unitOfWork.SaveChangesAsync();
 
                 // Clear cache after updating category status
-                _memoryCache.Remove(CacheMemory.Category.ToString());
+                _memoryCache.Remove(CacheMemory.Category);
 
                 return _mapper.Map<CategoryDto>(category);
             }
@@ -167,7 +167,7 @@ namespace TechYardHub.BusinessLayer.Services
         {
             try
             {
-                var category = await _unitOfWork.CategoriesRepository.GetByIdAsync(id);
+                var category = await _unitOfWork.CategoriesRepository.FindAsync(a => a.Id == id, include: query => query.Include(p => p.image));
                 if (category == null)
                 {
                     throw new KeyNotFoundException($"Category with ID {id} not found.");
@@ -182,7 +182,7 @@ namespace TechYardHub.BusinessLayer.Services
                 await _unitOfWork.SaveChangesAsync();
 
                 // Clear cache after deleting a category
-                _memoryCache.Remove(CacheMemory.Category.ToString());
+                _memoryCache.Remove(CacheMemory.Category);
 
                 return true;
             }
